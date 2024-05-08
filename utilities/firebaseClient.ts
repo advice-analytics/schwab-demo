@@ -70,6 +70,9 @@ const createAccountWithEmail = async (email: string, password: string): Promise<
 const signInUserWithEmailAndPassword = async (email: string, password: string): Promise<UserCredential> => {
   try {
     const userCredential: UserCredential = await signInWithEmailAndPassword(auth, email, password);
+    // // @ts-ignore
+    // const accessToken: string = userCredential?.user?.stsTokenManager?.accessToken || '';
+    // localStorage.setItem('accessToken', accessToken);
     return userCredential;
   } catch (error: any) {
     console.error('Error signing in with email and password:', error.message);

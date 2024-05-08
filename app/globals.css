@@ -111,23 +111,15 @@ h3 {
   z-index: 1; /* Ensure the nav container is below other elements */
 }
 
-.nav-container ul {
-  list-style: none;
-  padding: 0;
-}
-
-.nav-container ul li {
-  padding: 20px;
-  margin-top: 50px;
+.nav-item {
   cursor: pointer;
-  font-size: 24px;
+  padding: 10px 20px;
+  font-size: 20px;
   color: #144E74;
 }
 
-.nav-container ul li:hover,
-.nav-container ul li.active {
+.nav-item.active {
   font-weight: bold;
-  color: #144E74;
 }
 
 /* Styling for border line */

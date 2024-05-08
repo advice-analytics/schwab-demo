@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { Plan } from '@/types/PlanTypes';
 import { Participant } from '@/types/ParticipantTypes';
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface PlanTableProps {
   plans: Plan[];
@@ -11,6 +13,7 @@ interface PlanTableProps {
 }
 
 const PlanTable: React.FC<PlanTableProps> = ({ plans, onPlanSelect, onHealthClick }) => {
+  const router = useRouter();
   const [isMobileView, setIsMobileView] = useState<boolean>(false);
 
   const calculateParticipantsCount = (participants: Participant[] | undefined): number => {
@@ -30,6 +33,12 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onPlanSelect, onHealthClic
       totalParticipants,
     };
   };
+
+  const handlePlanSelect = (plan: Plan) => {
+    //onPlanSelect(plan);
+    console.log(plan)
+    router.push(`/advisor/participants-and-campaigns?planId=${plan.id}`);
+  };
   
   const summary = calculateSummary(plans);
   
@@ -47,9 +56,9 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onPlanSelect, onHealthClic
       style={{
         maxWidth: '100%',
         overflowX: 'auto',
-        color: 'black',
-        padding: '20px',
+        color: 'black'
       }}
+      className={'mt-5'}
     >
       {/* Display summary information */}
       <div
@@ -92,11 +101,11 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onPlanSelect, onHealthClic
             </tr>
           </thead>
           <tbody>
-            {plans.map((plan) => (
-              <tr key={plan.planName} style={{ borderBottom: '1px solid #ccc', whiteSpace: 'nowrap' }}>
-                <td style={{ padding: '12px', textAlign: 'center' }}>{plan.planName}</td>
+            {plans.map((plan: Plan, index: number) => (
+              <tr key={plan.id} style={{ borderBottom: '1px solid #ccc', whiteSpace: 'nowrap' }}>
+                <td style={{ padding: '12px', textAlign: 'center' }}>{index + 1}</td>
                 {!isMobileView && (
-                  <td style={{ padding: '12px', textAlign: 'center' }}>{plan.participants ? plan.participants.length : 0}</td>
+                  <td style={{ padding: '12px', textAlign: 'center' }}>{plan.participant_count ?? 0}</td>
                 )}
                 <td style={{ padding: '12px', textAlign: 'center' }}>
                   <span
@@ -107,28 +116,27 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onPlanSelect, onHealthClic
                     }}
                     onClick={() => onHealthClick(plan)}
                   >
-                    {plan.health}
+                    {plan.metrics?.health}
                   </span>
                 </td>
                 <td style={{ padding: '12px', textAlign: 'center' }}>
-                  <button
-                    style={{
-                      cursor: 'pointer',
-                      backgroundColor: plan.planName === '558' ? '#144e74' : '#ccc',
-                      color: plan.planName === '558' ? 'white' : 'black',
-                      border: 'none',
-                      borderRadius: '5px',
-                      padding: '8px 12px',
-                    }}
-                    onClick={() => {
-                      if (plan.planName === '558') {
-                        onPlanSelect(plan);
-                      }
-                    }}
-                    disabled={plan.planName !== '558'}
-                  >
-                    Select
-                  </button>
+                  <div className={'flex justify-center'}>
+                    <button
+                      style={{
+                        cursor: 'pointer',
+                        backgroundColor: '#144e74',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '5px',
+                        padding: '8px 12px',
+                      }}
+                      className={'flex items-center gap-x-2'}
+                      onClick={() => handlePlanSelect(plan)}
+                    >
+                      Select
+                      <Image src={'/open-link.png'} alt={''} width={20} height={20}/>
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

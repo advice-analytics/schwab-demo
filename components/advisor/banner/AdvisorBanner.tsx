@@ -5,9 +5,7 @@ import Image from 'next/image';
 import { auth } from '@/utilities/firebaseClient';
 import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import AdvisorInfo from './AdvisorInfo';
-import ValuePropPopup from '../value/ValuePropPopup';
-import ValueProp from '../value/ValueProp';
-import { saveValuePropToDatabase, getValuePropFromDatabase } from '@/utilities/firebaseClient'; // Import Firebase functions
+import Link from "next/link"; // Import Firebase functions
 
 const serviceCategories = [
   { name: 'Retirement', icon: 'retirement-light.svg' },
@@ -24,7 +22,6 @@ const AdvisorBanner: React.FC = () => {
   const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(null);
   const [valuePropId, setValuePropId] = useState<string>('');
   const [loadingProfile, setLoadingProfile] = useState<boolean>(true);
-  const [showValuePropPopup, setShowValuePropPopup] = useState<boolean>(false);
   const [showAdvisorInfo, setShowAdvisorInfo] = useState<boolean>(false);
 
   useEffect(() => {
@@ -99,14 +96,6 @@ const AdvisorBanner: React.FC = () => {
     }
   };
 
-  const handleValuePropClick = () => {
-    setShowValuePropPopup(true);
-  };
-
-  const handleCloseValuePropPopup = () => {
-    setShowValuePropPopup(false);
-  };
-
   const handleGearIconClick = () => {
     setShowAdvisorInfo(true);
   };
@@ -139,7 +128,13 @@ const AdvisorBanner: React.FC = () => {
         <div className="advisor-info text-right">
           <div className="username text-yellow-300 text-sm">{userEmail}</div>
           <div className="commsid text-sm text-white">Your CommsID: <span className="valuePropId text-green-400">{valuePropId}</span></div>
-          <div className="value-prop-link text-sm cursor-pointer underline" onClick={handleValuePropClick}>Value Proposition</div>
+          <Link
+            className="value-prop-link text-sm cursor-pointer underline"
+            href={'/advisor/value-prop'}
+            target={'_blank'}
+          >
+            Value Proposition
+          </Link>
         </div>
         <div className="gear-icon cursor-pointer" onClick={handleGearIconClick}>
           <Image src="/gear.png" alt="Settings" width={30} height={30} />
@@ -154,18 +149,6 @@ const AdvisorBanner: React.FC = () => {
           ))}
         </div>
       </div>
-      {showValuePropPopup && (
-        <ValuePropPopup onClose={handleCloseValuePropPopup} valueProp="Load value">
-          <ValueProp
-            uid={auth.currentUser?.uid || ''} // Use 'uid' instead of 'userId'
-            initialValue="Default Value"
-            onValuePropChange={(newValueProp) => {
-              // Handle changes to the value proposition here if needed
-              saveValuePropToDatabase(auth.currentUser?.uid || '', newValueProp); // Save value proposition to database
-            }}
-          />
-        </ValuePropPopup>
-      )}
       {showAdvisorInfo && (
         <AdvisorInfo
           userEmail={userEmail}

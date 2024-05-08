@@ -27,11 +27,13 @@ export interface Participant {
   estate: number;       // Add estate property
   planId: string;
   planName: string; // Add planName property  // Add planId property
-  adviceScore: string;
+  advice_score: string;
   scores: {
     [key: string]: number;
   };
   clients?: Client[];
+  top_interest: string;
+  external_id: string;
 }
 
 // Define the Client interface as a subtype of Participant

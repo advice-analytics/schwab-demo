@@ -3,11 +3,14 @@
 import { Participant } from "./ParticipantTypes";
 
 export interface Plan {
+  participant_count: number;
   id: string; 
   planName: string;
   balance: string;
   participants: Participant[];
-  health: string;
+  metrics: {
+    health: string;
+  }
 }
 
 

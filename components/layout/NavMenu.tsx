@@ -33,7 +33,7 @@ const NavMenu: React.FC<NavMenuProps> = ({}) => {
   }, []);
 
   return (
-    <Disclosure as='nav' className={`bg-black shadow ${isScrolled ? 'sticky-header' : ''}`}>
+    <Disclosure as='nav' className={`bg-black shadow ${isScrolled ? 'sticky-header' : ''} h-[4rem]`}>
       {({ open }) => (
         <>
           <div className='mx-auto max-w-8xl px-2 sm:px-4 lg:px-8'>
