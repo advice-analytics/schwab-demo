@@ -17,7 +17,7 @@ const ClientTablePopup: React.FC<ClientTablePopupProps> = ({
   participant,
   onClose,
 }) => {
-  const { retirement, financial, tax, investment, estate, planReturns, balance, age, state, gender, adviceScore } = participant;
+  const { retirement, financial, tax, investment, estate, planReturns, balance, age, state, gender, advice_score } = participant;
 
   const stressors = useMemo(() => [
     { name: 'Retirement', value: retirement, color: 'orange' },
@@ -127,7 +127,7 @@ const ClientTablePopup: React.FC<ClientTablePopupProps> = ({
             </div>
             <div className="popup-body">
               <canvas id="myChartModal"></canvas>
-              <p>Overall Advice Score: {adviceScore}</p>
+              <p>Overall Advice Score: {advice_score}</p>
               <p>Top Stressor: {topStressor.name}</p>
               <p>Plan Returns: {planReturns}</p>
               <p>Balance: {balance}</p>
