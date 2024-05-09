@@ -19,6 +19,7 @@ import CreatePlan from "@/components/plans/CreatePlan";
 import ParticipantsAndCampaigns from "@/components/participants-and-campaigns";
 import httpService from "@/services/http-service";
 import {AxiosResponse} from "axios";
+import ParticipantDetail from "@/components/participants-and-campaigns/ParticipantDetail";
 
 interface NavigationItem {
   id: number;
@@ -29,13 +30,11 @@ interface NavigationItem {
 
 interface NavMenuWrapperProps {
   activeItem: string;
-  openNewPage?: boolean;
-  parentItem?: string;
 }
 
 let cachedPlans: Plan[] = [];
 
-const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem, openNewPage, parentItem }) => {
+const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem }) => {
   const [navigationItems] = useState<NavigationItem[]>([
     { id: 1, label: 'All Plans', route: '/advisor' },
     { id: 3, label: 'Coming Soon...', disabled: true, route: '/' },
@@ -81,12 +80,7 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem, openNewPage, pare
   }, [userUid]);
 
   const handleNavigationItemClick = (item: NavigationItem) => {
-    if (openNewPage && typeof window !== 'undefined') {
-      window.open(item.route, '_blank');
-    }
-    else {
-      router.push(item.route);
-    }
+    router.push(item.route);
   };
 
   const handlePlanSelect = (plan: Plan) => {
@@ -124,8 +118,7 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem, openNewPage, pare
       case 'All Plans':
         return (
           <>
-            <div className={'flex justify-between'}>
-              <Search handleSearch={handlePlanSearch} />
+            <div className={'flex flex-row-reverse justify-between'}>
               <Link href={'/advisor/create-plan'} target={'_blank'}>
                 <button
                   className={'btn-primary bg-navyblue hover:bg-darknavyblue text-white rounded-md pl-5 pr-5 h-11 font-medium'}
@@ -171,6 +164,8 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem, openNewPage, pare
         return <CreatePlan />
       case 'Participants and Campaigns':
         return <ParticipantsAndCampaigns />
+      case 'Participant Detail':
+        return <ParticipantDetail />
       default:
         return null;
     }

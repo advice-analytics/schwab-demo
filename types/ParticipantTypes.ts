@@ -34,6 +34,7 @@ export interface Participant {
   clients?: Client[];
   top_interest: string;
   external_id: string;
+  is_favorite: boolean;
 }
 
 // Define the Client interface as a subtype of Participant

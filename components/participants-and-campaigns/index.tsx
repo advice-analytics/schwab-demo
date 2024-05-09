@@ -4,7 +4,6 @@ import TabView, { Tab } from "@/components/common/TabView";
 import Participants from "@/components/participants-and-campaigns/Participants";
 import {useRouter, useSearchParams} from "next/navigation";
 import Campaigns from "@/components/campaigns";
-import Search from "@/components/common/Search";
 
 function Index() {
   const router = useRouter();
@@ -21,22 +20,15 @@ function Index() {
     }
   ];
 
-  const handleBackClick = () => {
-    router.back();
-  }
-
   return (
     <div className={'flex flex-col gap-y-5'}>
-      <div className={'flex justify-between'}>
-        <div
-          className={'flex items-center text-navyblue underline cursor-pointer'}
-          onClick={handleBackClick}
-        >
-          <p>&lt;&lt; Back</p>
-        </div>
-        <Search handleSearch={() => {}} />
+      <div
+        className={'flex items-center text-navyblue underline cursor-pointer'}
+        onClick={() => router.back()}
+      >
+        <p>&lt;&lt; Back</p>
       </div>
-      <TabView tabs={tabs} />
+      <TabView tabs={tabs}/>
     </div>
   );
 }

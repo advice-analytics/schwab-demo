@@ -6,7 +6,6 @@ function CreateCampaignPage() {
     return (
         <NavMenuWrapper
           activeItem={'Create Campaign'}
-          openNewPage
         />
     );
 }

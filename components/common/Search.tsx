@@ -8,7 +8,7 @@ const Search: React.FC<{ handleSearch: any }> = ({ handleSearch }) => {
   return (
     <div className={'flex items-center'}>
       <input
-        className={'rounded-l h-11 w-[20rem] outline-none p-3.5'}
+        className={'rounded-l h-11 w-full md:w-[20rem] outline-none p-3.5'}
         placeholder={'Search...'}
         style={{ border: '1px solid lightgrey' }}
         ref={searchInputRef}

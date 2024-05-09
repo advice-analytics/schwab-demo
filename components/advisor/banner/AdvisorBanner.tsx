@@ -131,7 +131,6 @@ const AdvisorBanner: React.FC = () => {
           <Link
             className="value-prop-link text-sm cursor-pointer underline"
             href={'/advisor/value-prop'}
-            target={'_blank'}
           >
             Value Proposition
           </Link>

@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import { Participant } from "@/types/ParticipantTypes";
 import ParticipantTable from "@/components/advisor/tables/ParticipantTable";
 import httpService from "@/services/http-service";
+import Search from "@/components/common/Search";
 
 interface ParticipantsProps {
   planId: string | number;
@@ -11,11 +12,13 @@ interface ParticipantsProps {
 let cachedParticipants: { total_count: number; participants: Participant[] } | null = null;
 
 const Participants: React.FC<ParticipantsProps> = ({ planId }) => {
-  const [participantsData, setParticipantsData] = useState<{ total_count: number | undefined; participants: Participant[] | undefined } | undefined>();
+  const [participantsData, setParticipantsData] = useState<{
+    total_count: number | undefined; participants: Participant[] | undefined
+  } | undefined>();
 
-  const handleParticipantSearch = async (searchText: string) => {
+  const handleSearch = async (searchText: string) => {
     const results = cachedParticipants?.participants?.filter((participant: any) => {
-      return `${participant.id}`.includes(searchText);
+      return `${participant.external_id}`.includes(searchText);
     });
     setParticipantsData({ total_count: participantsData?.total_count, participants: results });
   }
@@ -32,14 +35,18 @@ const Participants: React.FC<ParticipantsProps> = ({ planId }) => {
       }
     };
 
-    cachedParticipants ? setParticipantsData(cachedParticipants) : fetchParticipants();
+    fetchParticipants();
   }, [planId]);
 
   return (
-    <ParticipantTable
-      participants={participantsData?.participants ?? []}
-      totalParticipants={participantsData?.total_count}
-    />
+    <div className={'flex flex-col gap-y-5 mt-3'}>
+      <Search handleSearch={handleSearch} />
+      <ParticipantTable
+        participants={participantsData?.participants ?? []}
+        totalParticipants={participantsData?.total_count}
+        planId={planId}
+      />
+    </div>
   );
 }
 

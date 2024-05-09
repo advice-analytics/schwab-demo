@@ -4,23 +4,28 @@ import React, { useState, useEffect } from 'react';
 import { Participant } from '@/types/ParticipantTypes';
 import { Plan } from '@/types/PlanTypes';
 import ClientTablePopup from './ClientTablePopup';
+import {useRouter} from "next/navigation";
+import FavoriteIcon from "@/components/participants-and-campaigns/FavoriteIcon";
 
 interface ParticipantTableProps {
   participants: Participant[];
   selectedPlan?: Plan | null;
   totalParticipants?: number;
+  planId: string | number;
 }
 
 const ParticipantTable: React.FC<ParticipantTableProps> = ({
-                                                             participants,
-                                                             selectedPlan,
-                                                             totalParticipants,
-                                                           }: ParticipantTableProps) => {
+  participants,
+  selectedPlan,
+  totalParticipants,
+  planId
+}: ParticipantTableProps) => {
   const [isMobileView, setIsMobileView] = useState<boolean>(false);
   const [filterValue, setFilterValue] = useState<string>('');
   const [selectedParticipant, setSelectedParticipant] = useState<Participant | null>(null);
   const [showClientTablePopup, setShowClientTablePopup] = useState<boolean>(false);
   const [selectedPage, setSelectedPage] = useState<number>(1);
+  const router = useRouter();
 
   const filteredParticipants = selectedPlan
     ? participants?.filter((participant) => participant.planId === selectedPlan.id)
@@ -52,8 +57,9 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
   };
 
   const handleParticipantSelect = (participant: Participant) => {
-    setSelectedParticipant(participant);
-    setShowClientTablePopup(true);
+    //setSelectedParticipant(participant);
+    //setShowClientTablePopup(true);
+    router.push(`/advisor/participant-detail?planId=${planId}&participantId=${participant.id}`);
   };
 
   const getTopStressor = (participant: Participant): string => {
@@ -132,7 +138,12 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
               onClick={() => handleParticipantSelect(participant)}
               style={{ borderBottom: '1px solid #ccc', cursor: 'pointer', whiteSpace: 'nowrap' }}
             >
-              <td style={{ padding: '12px', textAlign: 'center' }}>{participant.external_id}</td>
+              <td style={{ padding: '12px', textAlign: 'center' }}>
+                <div className={'flex justify-center items-center gap-x-2 w-full'}>
+                  <FavoriteIcon width={24} height={24} planId={planId} participantId={participant.id} />
+                  {participant.external_id}
+                </div>
+              </td>
               {!isMobileView && <td style={{ padding: '12px', textAlign: 'center' }}>{participant.advice_score}</td>}
               <td style={{ padding: '12px', textAlign: 'center', fontSize: isMobileView ? '14px' : 'inherit' }}>
                 {participant.top_interest}
