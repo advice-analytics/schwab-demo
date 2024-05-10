@@ -18,7 +18,7 @@ const Home: React.FC = () => {
   const [creatingAccount, setCreatingAccount] = useState(false);
   const [accountCreated, setAccountCreated] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const accessToken: string | null = useSearchParams().get('accessToken');
+  const accessToken: string | null = useSearchParams().get('accessToken') ?? localStorage.getItem('accessToken');
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
