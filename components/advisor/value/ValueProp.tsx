@@ -8,7 +8,7 @@ import { useAuth } from '@/components/context/authContext';
 interface ValuePropProps {
   uid: string;
   initialValue: string;
-  onValuePropChange: (newValueProp: string) => Promise<void>; // Define the onValuePropChange function
+  onValuePropChange: (newValueProp: string) => void; // Change to void
 }
 
 const ValueProp: React.FC<ValuePropProps> = ({ uid, initialValue }) => {
