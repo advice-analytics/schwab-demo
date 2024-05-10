@@ -28,6 +28,21 @@ const nextConfig = {
       },
     ];
   },
+
+  async headers() {
+    return [
+      {
+        // Apply Content-Security-Policy header
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: "frame-src 'self' *.dailyvest.com;",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

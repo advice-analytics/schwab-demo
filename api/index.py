@@ -3,6 +3,7 @@ from typing import List, Optional
 import json
 import os
 from fastapi.middleware.cors import CORSMiddleware
+import requests
 
 app = FastAPI()
 
@@ -29,6 +30,8 @@ origins = [
     "http://localhost",
     "http://localhost:3000",
     "https://schwab.commsai.io",  # Update with your frontend URL
+    "https://*.dailyvest.com",
+    "https://demo-api.commsai.io/"  # Add wildcard domain for CORS
     # Add more origins as needed
 ]
 
@@ -75,6 +78,20 @@ def get_plan_by_name(plan_name: str):
         if plan.get('planName') == plan_name:
             return plan
     raise HTTPException(status_code=404, detail="Plan not found")
+
+# Endpoint for OpenAI API proxy
+@app.post("/api/openai")
+def openai_proxy(prompt: str):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer YOUR_OPENAI_API_KEY'  # Replace with your OpenAI API key
+    }
+    data = {
+        'prompt': prompt
+    }
+    response = requests.post('https://api.openai.com/v1/chat/completions', headers=headers, json=data)
+    response.raise_for_status()  # Raise exception for non-2xx response codes
+    return response.json()
 
 if __name__ == '__main__':
     import uvicorn
