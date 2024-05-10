@@ -9,25 +9,31 @@ interface ParticipantsProps {
   planId: string | number;
 }
 
-let cachedParticipants: { total_count: number; participants: Participant[] } | null = null;
-
 const Participants: React.FC<ParticipantsProps> = ({ planId }) => {
   const [participantsData, setParticipantsData] = useState<{
     total_count: number | undefined; participants: Participant[] | undefined
   } | undefined>();
+  const [params, setParams] = useState<{
+    search: string;
+    page_size: number;
+    page: number;
+  }>({
+    search: '',
+    page_size: 10,
+    page: 1
+  });
 
-  const handleSearch = async (searchText: string) => {
-    const results = cachedParticipants?.participants?.filter((participant: any) => {
-      return `${participant.external_id}`.includes(searchText);
-    });
-    setParticipantsData({ total_count: participantsData?.total_count, participants: results });
+  const handleSearch = async (search: string) => {
+    setParams({ ...params, search, page: 1 });
   }
+
+  const getParams = () => params;
 
   useEffect(() => {
     const fetchParticipants = async () => {
       try {
-        const response = await httpService.get(`/v1/advisor/plan/${planId}/participants`);
-        cachedParticipants = response.data;
+        const response = await httpService.get(`/v1/advisor/plan/${planId}/participants?page=${params.page}&page_size=${params.page_size}&search=${params.search}`);
+        console.log(response.data)
         setParticipantsData(response.data);
       }
       catch (error: any) {
@@ -36,7 +42,7 @@ const Participants: React.FC<ParticipantsProps> = ({ planId }) => {
     };
 
     fetchParticipants();
-  }, [planId]);
+  }, [planId, params]);
 
   return (
     <div className={'flex flex-col gap-y-5 mt-3'}>
@@ -45,6 +51,8 @@ const Participants: React.FC<ParticipantsProps> = ({ planId }) => {
         participants={participantsData?.participants ?? []}
         totalParticipants={participantsData?.total_count}
         planId={planId}
+        setParams={setParams}
+        getParams={getParams}
       />
     </div>
   );

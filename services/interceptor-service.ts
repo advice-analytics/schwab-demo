@@ -12,7 +12,15 @@ class InterceptorService {
 
     get defaultHeaders() {
         const headers: { [key: string]: string } = { 'Content-Type': 'application/json' };
-        const accessToken: string = localStorage.getItem('accessToken') || getQueryParam('accessToken') || '';
+        let accessToken: string | null = getQueryParam('accessToken');
+
+        if (!accessToken) {
+            accessToken = localStorage.getItem('accessToken') ?? '';
+            if (!accessToken) {
+                window.location.href = '/';
+                return;
+            }
+        }
 
         headers['Authorization'] = `Bearer ${accessToken}`;
 
@@ -29,7 +37,7 @@ class InterceptorService {
             (response: any) => response,
             (error: any) => {
                 if (error?.response?.status === 401) {
-                    // Redirect to login if user is unauthorized
+                    window.location.href = '/';
                 }
                 return Promise.reject(error);
             }
@@ -54,6 +62,10 @@ class InterceptorService {
         try {
             return await this.instance(config);
         } catch (error: any) {
+            if (error.response.status === 401 || error.response.status === 403) {
+                window.location.href = '/';
+                return;
+            }
             throw error;
         }
     }

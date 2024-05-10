@@ -9,13 +9,16 @@ import {
   auth,
 } from '@/utilities/firebaseClient';
 import { isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth';
+import {useRouter, useSearchParams} from "next/navigation";
 
 const Home: React.FC = () => {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [creatingAccount, setCreatingAccount] = useState(false);
   const [accountCreated, setAccountCreated] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const accessToken: string | null = useSearchParams().get('accessToken');
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -90,6 +93,13 @@ const Home: React.FC = () => {
 
     handleSignInWithEmail();
   }, []);
+
+  useEffect(() => {
+    if (accessToken) {
+      localStorage.setItem('accessToken', accessToken);
+      router.replace('/advisor');
+    }
+  }, [accessToken, router]);
 
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col justify-center items-center">

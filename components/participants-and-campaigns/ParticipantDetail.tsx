@@ -5,13 +5,7 @@ import {AxiosResponse} from "axios";
 
 import httpService from "@/services/http-service";
 import FavoriteIcon from "@/components/participants-and-campaigns/FavoriteIcon";
-
-const Score: React.FC<{ label: string; value: string | number; style?: { color: string; }; }> = ({ label, value, style }) => (
-  <div className={`flex gap-x-3`}>
-    <b style={style}>{value}</b>
-    <p>{label}</p>
-  </div>
-);
+import Score from "@/components/participants-and-campaigns/Score";
 
 const ParticipantDetail = () => {
   const router = useRouter();
@@ -73,13 +67,13 @@ const ParticipantDetail = () => {
       <div className={'mt-3 md:mt-5 flex flex-col gap-y-3'}>
         <div className={'flex flex-col gap-y-3'}>
           <div className={'flex justify-between items-center'}>
-            <p className={'text-navyblue'}>Plan: {participantData?.name}</p>
+            <p className={'text-navyblue'}>Plan: {participantData?.plan_name}</p>
             <div>
               <div className={'flex flex-row-reverse'}>
                 <FavoriteIcon width={30} height={30} planId={planId} participantId={participantId} />
               </div>
               <div className={'flex items-center mt-2'}>
-                <p className={'text-2xl'} style={{ color: 'green' }}>{participantData?.overall_score}</p>
+                <p className={'text-2xl'} style={{ color: 'green' }}>{participantData?.advice_score}</p>
                 &nbsp;&nbsp;/&nbsp;
                 <p>100</p>
               </div>
@@ -96,7 +90,7 @@ const ParticipantDetail = () => {
               <div>
                 <Score label={'Financial Planning'} value={participantData?.finances_score} style={{ color: 'orange' }} />
                 <Score label={'Estate Planning'} value={participantData?.estate_score} style={{ color: 'green' }} />
-                <Score label={'Special'} value={participantData?.advice_score} />
+                <Score label={'Advice Score'} value={participantData?.advice_score} />
               </div>
             </div>
           </div>

@@ -6,7 +6,6 @@ import { Client, Plan } from "@/types/PlanTypes";
 import { Participant } from "@/types/ParticipantTypes";
 import { useAuth } from "@/components/context/authContext";
 import { auth, getValuePropFromDatabase, saveValuePropToDatabase } from "@/utilities/firebaseClient";
-import Search from "@/components/common/Search";
 import PlanTable from "@/components/advisor/tables/PlanTable";
 import ClientTable from "@/components/advisor/tables/ClientTable";
 import ValueProp from "@/components/advisor/value/ValueProp";
@@ -14,12 +13,12 @@ import AdvisorBanner from "@/components/advisor/banner/AdvisorBanner";
 import PlanHealth from "@/components/health/PlanHealth";
 import { useRouter } from "next/navigation";
 import CreateCampaign from "@/components/campaigns/CreateCampaign";
-import Link from "next/link";
 import CreatePlan from "@/components/plans/CreatePlan";
 import ParticipantsAndCampaigns from "@/components/participants-and-campaigns";
 import httpService from "@/services/http-service";
 import {AxiosResponse} from "axios";
 import ParticipantDetail from "@/components/participants-and-campaigns/ParticipantDetail";
+import Index from "../campaigns/campaign-details";
 
 interface NavigationItem {
   id: number;
@@ -55,7 +54,7 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem }) => {
     const fetchPlans = async () => {
       try {
         const response: AxiosResponse = await httpService.get('/v1/advisor/plan');
-        if (response.status !== 200) {
+        if (response?.status !== 200) {
           throw new Error('Failed to fetch plans');
         }
         const plansData: Plan[] = response.data;
@@ -118,15 +117,15 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem }) => {
       case 'All Plans':
         return (
           <>
-            <div className={'flex flex-row-reverse justify-between'}>
-              <Link href={'/advisor/create-plan'} target={'_blank'}>
-                <button
-                  className={'btn-primary bg-navyblue hover:bg-darknavyblue text-white rounded-md pl-5 pr-5 h-11 font-medium'}
-                >
-                  Add Plan
-                </button>
-              </Link>
-            </div>
+            {/*<div className={'flex flex-row-reverse justify-between'}>*/}
+            {/*  <Link href={'/advisor/create-plan'} target={'_blank'}>*/}
+            {/*    <button*/}
+            {/*      className={'btn-primary bg-navyblue hover:bg-darknavyblue text-white rounded-md pl-5 pr-5 h-11 font-medium'}*/}
+            {/*    >*/}
+            {/*      Add Plan*/}
+            {/*    </button>*/}
+            {/*  </Link>*/}
+            {/*</div>*/}
             <PlanTable plans={plans} onPlanSelect={handlePlanSelect} onHealthClick={handleHealthClick} />
             {selectedParticipant && (
               <ClientTable
@@ -166,6 +165,8 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem }) => {
         return <ParticipantsAndCampaigns />
       case 'Participant Detail':
         return <ParticipantDetail />
+      case 'Campaign Detail':
+        return <Index />
       default:
         return null;
     }

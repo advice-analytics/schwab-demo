@@ -36,7 +36,6 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onPlanSelect, onHealthClic
 
   const handlePlanSelect = (plan: Plan) => {
     //onPlanSelect(plan);
-    console.log(plan)
     router.push(`/advisor/participants-and-campaigns?planId=${plan.id}`);
   };
   
@@ -73,7 +72,6 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onPlanSelect, onHealthClic
         }}
       >
         <h3>Total Plans: {summary.totalPlans}</h3>
-        <h3>Participants: {summary.totalParticipants}</h3>
       </div>
   
       {/* Table container with horizontal scrollbar */}

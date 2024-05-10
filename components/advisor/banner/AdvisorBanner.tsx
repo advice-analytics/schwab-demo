@@ -44,16 +44,16 @@ const AdvisorBanner: React.FC = () => {
   }, []);
 
   const loadProfilePicture = async (uid: string) => {
-    try {
-      const storageRefPath = `profilePictures/${uid}.png`;
-      const storageReference = storageRef(storage, storageRefPath);
-      const downloadUrl = await getDownloadURL(storageReference);
-      setProfilePictureUrl(downloadUrl);
-      setLoadingProfile(false);
-    } catch (error) {
-      console.error('Error loading profile picture:', error);
-      setLoadingProfile(false);
-    }
+    // try {
+    //   const storageRefPath = `profilePictures/${uid}.png`;
+    //   const storageReference = storageRef(storage, storageRefPath);
+    //   const downloadUrl = await getDownloadURL(storageReference);
+    //   setProfilePictureUrl(downloadUrl);
+    //   setLoadingProfile(false);
+    // } catch (error) {
+    //   console.error('Error loading profile picture:', error);
+    //   setLoadingProfile(false);
+    // }
   };
 
   const handleFileInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {

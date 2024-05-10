@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, Dispatch, SetStateAction} from 'react';
 import { Participant } from '@/types/ParticipantTypes';
 import { Plan } from '@/types/PlanTypes';
 import ClientTablePopup from './ClientTablePopup';
@@ -12,19 +12,22 @@ interface ParticipantTableProps {
   selectedPlan?: Plan | null;
   totalParticipants?: number;
   planId: string | number;
+  setParams: Dispatch<SetStateAction<any>>;
+  getParams: () => any;
 }
 
 const ParticipantTable: React.FC<ParticipantTableProps> = ({
   participants,
   selectedPlan,
   totalParticipants,
-  planId
+  planId,
+  setParams, getParams
 }: ParticipantTableProps) => {
   const [isMobileView, setIsMobileView] = useState<boolean>(false);
   const [filterValue, setFilterValue] = useState<string>('');
   const [selectedParticipant, setSelectedParticipant] = useState<Participant | null>(null);
   const [showClientTablePopup, setShowClientTablePopup] = useState<boolean>(false);
-  const [selectedPage, setSelectedPage] = useState<number>(1);
+  const selectedPage = getParams().page;
   const router = useRouter();
 
   const filteredParticipants = selectedPlan
@@ -95,7 +98,7 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
   };
 
   const handlePageButtonClick = (page: number) => {
-    setSelectedPage(page);
+    setParams?.({ ...getParams?.(), page });
   }
 
   useEffect(() => {
@@ -107,21 +110,10 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
     };
   }, []);
 
-  const noOfPages: number = Math.ceil(filteredParticipants?.length / 10) || 0;
-  const paginationButtons: number[] = [];
-  let endButtons: number = noOfPages <= 3 ? noOfPages : 3;
-
-  for (let i = 1; i <= endButtons; i++) {
-    paginationButtons.push(i);
-  }
+  const noOfPages: number = Math.ceil((totalParticipants ?? 0) / 10) || 0;
 
   return (
     <div style={{ maxWidth: '100%', overflowX: 'auto', color: 'black' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', marginBottom: '20px', fontSize: '16px', fontWeight: 'bold', color: '#144e74' }}>
-        <h3>Plan: {totalParticipants}</h3>
-        <h3>Assets: ${summary.totalBalance.toFixed(2)}</h3>
-      </div>
-
       <div style={{ overflow: 'auto', border: '1px solid #ccc', borderRadius: '5px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
@@ -129,18 +121,20 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
             <th style={{ padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap' }}>Participant</th>
             {!isMobileView && <th style={{ padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap' }}>Advice Score</th>}
             <th style={{ padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap' }}>Top Interest</th>
+            <th>Actions</th>
           </tr>
           </thead>
           <tbody>
-          {filteredParticipants.slice(((selectedPage - 1) * 10), ((selectedPage - 1) * 10) + 10).map((participant: Participant) => (
+          {participants?.map((participant: Participant) => (
             <tr
               key={participant.id}
-              onClick={() => handleParticipantSelect(participant)}
-              style={{ borderBottom: '1px solid #ccc', cursor: 'pointer', whiteSpace: 'nowrap' }}
+              style={{ borderBottom: '1px solid #ccc', whiteSpace: 'nowrap' }}
             >
               <td style={{ padding: '12px', textAlign: 'center' }}>
-                <div className={'flex justify-center items-center gap-x-2 w-full'}>
-                  <FavoriteIcon width={24} height={24} planId={planId} participantId={participant.id} />
+                <div
+                  className={'flex justify-center items-center gap-x-2 w-full underline text-navyblue cursor-pointer'}
+                  onClick={() => handleParticipantSelect(participant)}
+                >
                   {participant.external_id}
                 </div>
               </td>
@@ -148,42 +142,28 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
               <td style={{ padding: '12px', textAlign: 'center', fontSize: isMobileView ? '14px' : 'inherit' }}>
                 {participant.top_interest}
               </td>
+              <td>
+                <div className={'flex justify-center'}>
+                  <FavoriteIcon width={24} height={24} planId={planId} participantId={participant.id} />
+                </div>
+              </td>
             </tr>
           ))}
           </tbody>
         </table>
-        <div className={'flex justify-center gap-x-3 w-full mb-3'}>
+        <div className={'flex justify-center items-center gap-x-3 w-full mb-3 mt-3'}>
           <button
-            className={`bg-gray-500 text-white mt-4 rounded-md py-1 px-4`}
+            className={`bg-gray-500 text-white rounded-md py-1 px-4`}
             disabled={selectedPage === 1}
             onClick={() => handlePageButtonClick(selectedPage - 1)}
           >
             &lt;
           </button>
-          {paginationButtons.map((page: number) => (
-            <button
-              key={page}
-              className={`${selectedPage === page ? 'bg-navyblue' : 'bg-gray-500'} text-white mt-4 rounded-md py-1 px-4`}
-              onClick={() => handlePageButtonClick(page)}
-            >
-              {page}
-            </button>
-          ))}
-          {noOfPages > 3 && (
-            <>
-              <button>...</button>
-              <button
-                className={`${selectedPage === noOfPages ? 'bg-navyblue' : 'bg-gray-500'} text-white mt-4 rounded-md py-1 px-4`}
-                onClick={() => handlePageButtonClick(noOfPages)}
-              >
-                {noOfPages}
-              </button>
-            </>
-          )}
+          <p>{selectedPage} of {noOfPages}</p>
           <button
-            className={`bg-gray-500 text-white mt-4 rounded-md py-1 px-4`}
-            disabled={selectedPage === noOfPages}
+            className={`bg-gray-500 text-white rounded-md py-1 px-4`}
             onClick={() => handlePageButtonClick(selectedPage + 1)}
+            disabled={selectedPage === noOfPages}
           >
             &gt;
           </button>

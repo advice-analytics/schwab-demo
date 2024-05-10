@@ -25,6 +25,7 @@
     "axios": "^1.6.8",
     "chart.js": "^4.4.2",
     "concurrently": "^8.0.1",
+    "downloadjs": "^1.4.7",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
     "firebase": "^10.10.0",
@@ -39,6 +40,7 @@
     "typescript": "5.0.4"
   },
   "devDependencies": {
+    "@types/downloadjs": "^1.4.6",
     "@types/node": "^20.12.7",
     "@types/react-chartjs-2": "^2.5.7",
     "@types/react-modal": "^3.16.3"
