@@ -43,7 +43,7 @@ const Page: React.FC = () => {
     const signInUser = async () => {
       try {
         // Sign in the predefined user with provided credentials
-        await signInUserWithEmailAndPassword('askme@adviceanalytics.com', 'ai2024');
+        await signInUserWithEmailAndPassword('askme@adviceanalytics.com', 'Dw33e1WBrVfeBr74eYi0qQKwvuz1');
         console.log('User signed in successfully.');
 
         // Fetch data after successful sign-in
