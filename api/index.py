@@ -31,8 +31,7 @@ origins = [
     "http://localhost:3000",
     "https://schwab.commsai.io",  # Update with your frontend URL
     "https://*.dailyvest.com",
-    "https://demo-api.commsai.io/"  # Add wildcard domain for CORS
-    # Add more origins as needed
+    "https://demo-api.commsai.io/"  
 ]
 
 app.add_middleware(
