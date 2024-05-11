@@ -22,7 +22,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        setUserData({ uid: user.uid });
+        // Check the user's email to set a specific UID for askme@adviceanalytics.com
+        const userEmail = user.email;
+        if (userEmail === 'askme@adviceanalytics.com') {
+          setUserData({ uid: 'vD4s1ZlqFGg74xXMGDwEeOV8whJ2' });
+        } else {
+          setUserData({ uid: user.uid });
+        }
       } else {
         setUserData({ uid: null });
       }

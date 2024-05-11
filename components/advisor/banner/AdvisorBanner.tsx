@@ -167,7 +167,7 @@ const AdvisorBanner: React.FC = () => {
       {showAdvisorInfo && (
         <AdvisorInfo
           userEmail="askme@adviceanalytics.com" // Fixed userEmail as "askme"
-          valuePropId={valuePropId || 'defaultCommsID'} // Set a default commsID if valuePropId is empty
+          valuePropId={valuePropId || '8whJ2'} // Set a default commsID if valuePropId is empty
           onClose={() => setShowAdvisorInfo(false)}
         />
       )}

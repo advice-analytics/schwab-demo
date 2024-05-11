@@ -33,51 +33,37 @@ const Page: React.FC = () => {
   const [selectedParticipant, setSelectedParticipant] = useState<Participant | null>(null);
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [isHealthModalOpen, setHealthModalOpen] = useState(false);
-  const [initialValue, setInitialValue] = useState<string>(''); // State for initial value
+  const [initialValue, setInitialValue] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true); // State to track loading status
 
   const [userData, loadingAuth] = useAuth();
   const userUid: string = userData?.uid || '';
 
   useEffect(() => {
-    const fetchParticipants = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('/api/participants');
-        if (!response.ok) {
-          throw new Error('Failed to fetch participants');
-        }
-        const participantsData: Participant[] = await response.json();
-        setParticipants(participantsData);
-      } catch (error) {
-        console.error('Error fetching participants:', error);
-      }
-    };
+        const [plansResponse, participantsResponse] = await Promise.all([
+          fetch('/api/plans'),
+          fetch('/api/participants')
+        ]);
 
-    const fetchPlans = async () => {
-      try {
-        const response = await fetch('/api/plans');
-        if (!response.ok) {
-          throw new Error('Failed to fetch plans');
+        if (!plansResponse.ok || !participantsResponse.ok) {
+          throw new Error('Failed to fetch data');
         }
-        const plansData: Plan[] = await response.json();
+
+        const plansData: Plan[] = await plansResponse.json();
+        const participantsData: Participant[] = await participantsResponse.json();
+
         setPlans(plansData);
+        setParticipants(participantsData);
+        setLoading(false); // Set loading state to false after data fetching is complete
       } catch (error) {
-        console.error('Error fetching plans:', error);
+        console.error('Error fetching data:', error);
       }
     };
 
-    const fetchInitialValue = async () => {
-      try {
-        const valueFromDatabase = await getValuePropFromDatabase(userUid);
-        setInitialValue(valueFromDatabase || ''); // Set initial value or default to empty string
-      } catch (error) {
-        console.error('Error fetching initial value:', error);
-      }
-    };
-
-    fetchParticipants();
-    fetchPlans();
-    fetchInitialValue(); // Fetch initial value for ValueProp component
-  }, [userUid]);
+    fetchData();
+  }, []);
 
   const handleNavigationItemClick = (item: NavigationItem) => {
     setSelectedNavItem(item);
@@ -109,6 +95,10 @@ const Page: React.FC = () => {
   };
 
   const renderContent = () => {
+    if (loading) {
+      return <p>Loading Plan Data...</p>; // Display loading indicator while fetching data
+    }
+
     switch (selectedNavItem.label) {
       case 'All Plans':
         return (
@@ -131,9 +121,9 @@ const Page: React.FC = () => {
       case 'Value Proposition':
         return (
           <ValueProp
-            uid={userUid} // Pass userUid directly as uid
+            uid={userUid}
             onValuePropChange={handleValuePropChange}
-            initialValue={initialValue} // Pass the fetched initial value to ValueProp
+            initialValue={initialValue}
           />
         );
       case 'Plan Campaigns':
