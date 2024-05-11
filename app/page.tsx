@@ -11,7 +11,7 @@ import PlanHealth from '@/components/health/PlanHealth';
 import { Plan, Client } from '@/types/PlanTypes';
 import { Participant } from '@/types/ParticipantTypes';
 import { useAuth } from '@/components/context/authContext';
-import { getValuePropFromDatabase, saveValuePropToDatabase } from '@/utilities/firebaseClient'; // Import Firebase functions
+import { getValuePropFromDatabase, saveValuePropToDatabase, signInUserWithEmailAndPassword } from '@/utilities/firebaseClient';
 
 interface NavigationItem {
   id: number;
@@ -34,36 +34,53 @@ const Page: React.FC = () => {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [isHealthModalOpen, setHealthModalOpen] = useState(false);
   const [initialValue, setInitialValue] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(true); // State to track loading status
+  const [loading, setLoading] = useState<boolean>(true);
 
   const [userData, loadingAuth] = useAuth();
   const userUid: string = userData?.uid || '';
 
   useEffect(() => {
-    const fetchData = async () => {
+    const signInUser = async () => {
       try {
-        const [plansResponse, participantsResponse] = await Promise.all([
-          fetch('/api/plans'),
-          fetch('/api/participants')
-        ]);
+        // Sign in the predefined user with provided credentials
+        await signInUserWithEmailAndPassword('askme@adviceanalytics.com', 'ai2024');
+        console.log('User signed in successfully.');
 
-        if (!plansResponse.ok || !participantsResponse.ok) {
-          throw new Error('Failed to fetch data');
-        }
-
-        const plansData: Plan[] = await plansResponse.json();
-        const participantsData: Participant[] = await participantsResponse.json();
-
-        setPlans(plansData);
-        setParticipants(participantsData);
-        setLoading(false); // Set loading state to false after data fetching is complete
+        // Fetch data after successful sign-in
+        fetchData();
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error signing in:', error);
       }
     };
 
-    fetchData();
+    if (!userData) {
+      signInUser(); // Sign in user only if not already authenticated
+    } else {
+      fetchData(); // Fetch data if user is already authenticated
+    }
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const [plansResponse, participantsResponse] = await Promise.all([
+        fetch('/api/plans'),
+        fetch('/api/participants')
+      ]);
+
+      if (!plansResponse.ok || !participantsResponse.ok) {
+        throw new Error('Failed to fetch data');
+      }
+
+      const plansData: Plan[] = await plansResponse.json();
+      const participantsData: Participant[] = await participantsResponse.json();
+
+      setPlans(plansData);
+      setParticipants(participantsData);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
   const handleNavigationItemClick = (item: NavigationItem) => {
     setSelectedNavItem(item);
@@ -96,7 +113,7 @@ const Page: React.FC = () => {
 
   const renderContent = () => {
     if (loading) {
-      return <p>Loading Plan Data...</p>; // Display loading indicator while fetching data
+      return <p>Loading Plan Data...</p>;
     }
 
     switch (selectedNavItem.label) {
