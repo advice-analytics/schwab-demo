@@ -1,24 +1,14 @@
-'use client'
-
 import React from 'react';
-import { auth } from '@/utilities/firebaseClient';
 import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 interface AdvisorInfoProps {
-  userEmail: string | null;
+  userEmail: string; // Include userEmail in the props interface
   valuePropId: string;
   onClose: () => void;
 }
 
-const AdvisorInfo: React.FC<AdvisorInfoProps> = ({ userEmail, valuePropId, onClose }) => {
-  const handleLogout = async () => {
-    try {
-      await auth.signOut();
-      window.location.href = '/';
-    } catch (error: any) {
-      console.error('Error logging out:', error.message);
-    }
-  };
+const AdvisorInfo: React.FC<AdvisorInfoProps> = ({ valuePropId, onClose }) => {
+  const userEmail = 'askme@adviceanalytics.com'; // Fixed email for the "logged-in" user
 
   const handlePlanDataUpload = async (file: File) => {
     try {
@@ -28,7 +18,8 @@ const AdvisorInfo: React.FC<AdvisorInfoProps> = ({ userEmail, valuePropId, onClo
 
       const uploadTask = uploadBytesResumable(fileRef, file);
 
-      uploadTask.on('state_changed',
+      uploadTask.on(
+        'state_changed',
         (snapshot) => {
           // Handle upload progress if needed
         },
@@ -108,15 +99,20 @@ const AdvisorInfo: React.FC<AdvisorInfoProps> = ({ userEmail, valuePropId, onClo
     <div className="advisor-info-modal" onClick={handleOverlayClick}>
       <div className="modal-content">
         <h1>Settings</h1>
-        <p><strong>Email:</strong> {userEmail}</p>
-        <p><strong>CommsID:</strong> {valuePropId}</p>
+        <p>
+          <strong>Email:</strong> {userEmail}
+        </p>
+        <p>
+          <strong>CommsID:</strong> {valuePropId}
+        </p>
         <div className="settings">
-          <button className="logout-btn" onClick={handleLogout}>Logout</button>
           <label className="file-upload-btn">
             Upload Plan Data
             <input type="file" onChange={handleFileInputChange} className="file-input" />
           </label>
-          <button className="download-example-btn" onClick={handleDownloadExampleData}>Download Example Data</button>
+          <button className="download-example-btn" onClick={handleDownloadExampleData}>
+            Download Example Data
+          </button>
         </div>
       </div>
       <style jsx>{`
@@ -147,7 +143,6 @@ const AdvisorInfo: React.FC<AdvisorInfoProps> = ({ userEmail, valuePropId, onClo
         .settings {
           margin-top: 20px;
         }
-        .logout-btn,
         .file-upload-btn,
         .download-example-btn {
           display: block;
@@ -162,7 +157,6 @@ const AdvisorInfo: React.FC<AdvisorInfoProps> = ({ userEmail, valuePropId, onClo
           cursor: pointer;
           transition: background-color 0.3s ease;
         }
-        .logout-btn:hover,
         .file-upload-btn:hover,
         .download-example-btn:hover {
           background-color: #144e74;

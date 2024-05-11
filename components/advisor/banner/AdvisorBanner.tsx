@@ -7,7 +7,7 @@ import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } f
 import AdvisorInfo from './AdvisorInfo';
 import ValuePropPopup from '../value/ValuePropPopup';
 import ValueProp from '../value/ValueProp';
-import { saveValuePropToDatabase, getValuePropFromDatabase } from '@/utilities/firebaseClient'; // Import Firebase functions
+import { saveValuePropToDatabase } from '@/utilities/firebaseClient'; // Import Firebase functions
 
 const serviceCategories = [
   { name: 'Retirement', icon: 'retirement-light.svg' },
@@ -16,8 +16,6 @@ const serviceCategories = [
   { name: 'Investment', icon: 'investement-light.svg' },
   { name: 'Estate Plans', icon: 'estate-light.svg' },
 ];
-
-const storage = getStorage();
 
 const AdvisorBanner: React.FC = () => {
   const [userEmail, setUserEmail] = useState<string | null>(null);
@@ -49,7 +47,7 @@ const AdvisorBanner: React.FC = () => {
   const loadProfilePicture = async (uid: string) => {
     try {
       const storageRefPath = `profilePictures/${uid}.png`;
-      const storageReference = storageRef(storage, storageRefPath);
+      const storageReference = storageRef(getStorage(), storageRefPath);
       const downloadUrl = await getDownloadURL(storageReference);
       setProfilePictureUrl(downloadUrl);
       setLoadingProfile(false);
@@ -60,7 +58,7 @@ const AdvisorBanner: React.FC = () => {
   };
 
   const handleFileInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files && event.target.files[0];
+    const file = event.target.files?.[0];
     if (file) {
       try {
         setLoadingProfile(true);
@@ -70,7 +68,7 @@ const AdvisorBanner: React.FC = () => {
         }
 
         const storageRefPath = `profilePictures/${uid}.png`;
-        const storageReference = storageRef(storage, storageRefPath);
+        const storageReference = storageRef(getStorage(), storageRefPath);
         const uploadTask = uploadBytesResumable(storageReference, file);
 
         uploadTask.on(
@@ -137,8 +135,8 @@ const AdvisorBanner: React.FC = () => {
           />
         </div>
         <div className="advisor-info text-right">
-          <div className="username text-yellow-300 text-sm">{userEmail}</div>
-          <div className="commsid text-sm text-white">Your CommsID: <span className="valuePropId text-green-400">{valuePropId}</span></div>
+          <div className="username text-yellow-300 text-sm">askme@adviceanalytics.com</div> {/* Fixed username display */}
+          <div className="commsid text-sm text-white">Your CommsID: <span className="valuePropId text-green-400">8whJ2</span></div>
           <div className="value-prop-link text-sm cursor-pointer underline" onClick={handleValuePropClick}>Value Proposition</div>
         </div>
         <div className="gear-icon cursor-pointer" onClick={handleGearIconClick}>
@@ -168,8 +166,8 @@ const AdvisorBanner: React.FC = () => {
       )}
       {showAdvisorInfo && (
         <AdvisorInfo
-          userEmail={userEmail}
-          valuePropId={valuePropId}
+          userEmail="askme@adviceanalytics.com" // Fixed userEmail as "askme"
+          valuePropId={valuePropId || 'defaultCommsID'} // Set a default commsID if valuePropId is empty
           onClose={() => setShowAdvisorInfo(false)}
         />
       )}

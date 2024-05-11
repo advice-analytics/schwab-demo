@@ -1,5 +1,5 @@
 import './globals.css'
-
+import Footer from '@/components/layout/Footer'
 
 export const metadata = {
   title: 'Welcome',
@@ -13,7 +13,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <div className='flex flex-col min-h-screen'>
+      <Footer />
+    </div>
+      </body>
     </html>
   )
 }
