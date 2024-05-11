@@ -3,46 +3,31 @@
 import React, { useState, useEffect } from 'react';
 import { saveValuePropToDatabase, getValuePropFromDatabase } from '@/utilities/firebaseClient';
 import { generateValuePropPrompt } from '@/utilities/valuePrompt';
-import { useAuth } from '@/components/context/authContext';
 
-interface ValuePropProps {
-  uid: string;
-  initialValue: string;
-  onValuePropChange: (newValueProp: string) => void; // Change to void
-}
-
-const ValueProp: React.FC<ValuePropProps> = ({ uid, initialValue }) => {
+const ValueProp: React.FC<{ initialValue: string }> = ({ initialValue }) => {
   const [valueProp, setValueProp] = useState(initialValue);
   const [loading, setLoading] = useState(false);
   const [idealClient, setIdealClient] = useState<string[]>([]);
   const [role, setRole] = useState<string>('');
   const [uniqueDescription, setUniqueDescription] = useState<string>('');
   const [created, setCreated] = useState(false);
-  const [userData, loadingAuth] = useAuth();
 
   useEffect(() => {
     const fetchValueProp = async () => {
-      if (uid) {
-        setLoading(true);
-        try {
-          const fetchedValueProp = await getValuePropFromDatabase(uid);
-          if (fetchedValueProp !== undefined) {
-            setValueProp(fetchedValueProp);
-            setCreated(true);
-          } else {
-            setValueProp('');
-            setCreated(false);
-          }
-        } catch (error) {
-          console.error('Error fetching value proposition:', error);
-        } finally {
-          setLoading(false);
-        }
+      setLoading(true);
+      try {
+        const fetchedValueProp = await getValuePropFromDatabase();
+        setValueProp(fetchedValueProp || '');
+        setCreated(!!fetchedValueProp);
+      } catch (error) {
+        console.error('Error fetching value proposition:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchValueProp();
-  }, [uid]);
+  }, []);
 
   const handleGenerateValueProp = async () => {
     if (idealClient.length === 0 || !role || !uniqueDescription) {
@@ -52,7 +37,7 @@ const ValueProp: React.FC<ValuePropProps> = ({ uid, initialValue }) => {
 
     setLoading(true);
     try {
-      const generatedValueProp = await generateValuePropPrompt(idealClient.join(', '), role, uniqueDescription, uid);
+      const generatedValueProp = await generateValuePropPrompt(idealClient.join(', '), role, uniqueDescription);
       setValueProp(generatedValueProp);
       setCreated(true); // Mark as created after generating
       alert('Value proposition generated successfully!');
@@ -65,10 +50,10 @@ const ValueProp: React.FC<ValuePropProps> = ({ uid, initialValue }) => {
   };
 
   const handleSave = async () => {
-    if (uid && valueProp.trim() !== '') {
+    if (valueProp.trim() !== '') {
       setLoading(true);
       try {
-        await saveValuePropToDatabase(uid, valueProp);
+        await saveValuePropToDatabase(valueProp);
         alert('Value proposition saved successfully!');
       } catch (error) {
         console.error('Error saving value proposition:', error);
@@ -80,17 +65,14 @@ const ValueProp: React.FC<ValuePropProps> = ({ uid, initialValue }) => {
   };
 
   const handleDelete = async () => {
-    // Reset value prop and update database if uid is available
     setValueProp('');
     setCreated(false); // Reset creation status
-    if (uid) {
-      try {
-        await saveValuePropToDatabase(uid, ''); // Update database with empty value
-        alert('Value proposition deleted successfully!');
-      } catch (error) {
-        console.error('Error deleting value proposition:', error);
-        alert('Failed to delete value proposition. Please try again.');
-      }
+    try {
+      await saveValuePropToDatabase(''); // Update database with empty value
+      alert('Value proposition deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting value proposition:', error);
+      alert('Failed to delete value proposition. Please try again.');
     }
   };
 
@@ -244,7 +226,7 @@ const ValueProp: React.FC<ValuePropProps> = ({ uid, initialValue }) => {
           <div className="flex items-center justify-between mt-4">
             <button
               onClick={handleSave}
-              disabled={loading || !uid}
+              disabled={loading}
               className="bg-green-400 text-white px-4 py-2 rounded-md"
             >
               {loading ? 'Saving...' : 'Save'}

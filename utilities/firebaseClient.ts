@@ -109,9 +109,11 @@ const completeSignInWithEmailLink = async (email: string, url: string) => {
 };
 
 // Function to save value proposition to Firebase Realtime Database
-const saveValuePropToDatabase = async (uid: string, valueProp: string): Promise<void> => {
+const saveValuePropToDatabase = async (valueProp: string): Promise<void> => {
   try {
-    const valuePropRef = dbRef(database, `users/${uid}/valueProp`);
+    // Use the predefined UID for the value proposition data
+    const predefinedUID = 'Dw33e1WBrVfeBr74eYi0qQKwvuz1';
+    const valuePropRef = dbRef(database, `users/${predefinedUID}/valueProp`);
     await set(valuePropRef, { value: valueProp });
     console.log('Value proposition saved successfully.');
   } catch (error: any) {
@@ -120,10 +122,13 @@ const saveValuePropToDatabase = async (uid: string, valueProp: string): Promise<
   }
 };
 
+
 // Function to get value proposition from Firebase Realtime Database
-const getValuePropFromDatabase = async (uid: string): Promise<string> => {
+const getValuePropFromDatabase = async (): Promise<string> => {
   try {
-    const valuePropRef = dbRef(database, `users/${uid}/valueProp`);
+    // Use the predefined UID to retrieve the value proposition data
+    const predefinedUID = 'Dw33e1WBrVfeBr74eYi0qQKwvuz1';
+    const valuePropRef = dbRef(database, `users/${predefinedUID}/valueProp`);
     const dataSnapshot: DataSnapshot = await get(valuePropRef);
     const valuePropData = dataSnapshot.val();
 
@@ -134,6 +139,7 @@ const getValuePropFromDatabase = async (uid: string): Promise<string> => {
     throw error;
   }
 };
+
 
 const deleteCampaignFromDatabase = async (campaignId: string): Promise<void> => {
   try {
@@ -154,31 +160,32 @@ const deleteCampaignFromDatabase = async (campaignId: string): Promise<void> => 
 };
 
 // Function to save campaign data to Firebase Realtime Database
-const saveCampaignToDatabase = async (uid: string, campaign: Campaign): Promise<void> => {
+// Function to save campaign data to Firebase Realtime Database
+const saveCampaignToDatabase = async (campaign: Campaign): Promise<void> => {
   try {
-    const user = auth.currentUser;
-    if (!user) {
-      throw new Error('User is not authenticated.');
-    }
-
-    const uid = user.uid;
-    const campaignsRef = dbRef(database, `users/${uid}/campaigns`);
+    // Use the predefined email and UID for the campaign data
+    const predefinedUID = 'Dw33e1WBrVfeBr74eYi0qQKwvuz1';
+    const campaignsRef = dbRef(database, `users/${predefinedUID}/campaigns`);
 
     // Save campaign data under a new push ID (Firebase generates unique ID)
     const newCampaignRef = push(campaignsRef);
     await set(newCampaignRef, campaign);
 
-    console.log(`Campaign data saved successfully for uid ${uid}.`);
+    console.log(`Campaign data saved successfully for uid ${predefinedUID}.`);
   } catch (error: any) {
     console.error('Error saving campaign data to database:', error.message);
     throw error;
   }
 };
 
+
+
 // Function to retrieve campaigns for a specific user from Firebase Realtime Database
-const getCampaignsForUser = async (uid: string): Promise<Campaign[]> => {
+const getCampaignsForUser = async (): Promise<Campaign[]> => {
   try {
-    const campaignsRef = dbRef(database, `users/${uid}/campaigns`);
+    // Use the predefined UID to retrieve campaigns
+    const predefinedUID = 'Dw33e1WBrVfeBr74eYi0qQKwvuz1';
+    const campaignsRef = dbRef(database, `users/${predefinedUID}/campaigns`);
     const dataSnapshot: DataSnapshot = await get(campaignsRef);
 
     const campaigns: Campaign[] = [];
@@ -204,15 +211,18 @@ const getCampaignsForUser = async (uid: string): Promise<Campaign[]> => {
   }
 };
 
+
 // Function to upload user profile picture with dynamic file extension
-const uploadProfilePicture = async (uid: string, file: File): Promise<string> => {
+const uploadProfilePicture = async (file: File): Promise<string> => {
   try {
+    // Use the predefined UID for the profile picture upload
+    const predefinedUID = 'Dw33e1WBrVfeBr74eYi0qQKwvuz1';
     const fileExtension = file.name.split('.').pop(); // Get file extension
     if (!fileExtension) {
       throw new Error('Invalid file format');
     }
 
-    const storageRefPath = `profilePictures/${uid}/${uid}.${fileExtension}`;
+    const storageRefPath = `profilePictures/${predefinedUID}/${predefinedUID}.${fileExtension}`;
     const storageReference: StorageReference = storageRef(storage, storageRefPath);
     const uploadTask: UploadTask = uploadBytesResumable(storageReference, file);
 
@@ -226,11 +236,13 @@ const uploadProfilePicture = async (uid: string, file: File): Promise<string> =>
   }
 };
 
+
 // Function to get user profile picture download URL with dynamic file extension
-const getProfilePictureURL = async (uid: string): Promise<string | null> => {
+const getProfilePictureURL = async (): Promise<string | null> => {
   try {
-    // Assuming the profile picture's file extension is unknown, we retrieve it from the storage reference
-    const storageRefPath = `profilePictures/${uid}/${uid}`; // Storage path without extension
+    // Use the predefined UID to retrieve the profile picture download URL
+    const predefinedUID = 'Dw33e1WBrVfeBr74eYi0qQKwvuz1';
+    const storageRefPath = `profilePictures/${predefinedUID}/${predefinedUID}`; // Storage path without extension
     const storageReference: StorageReference = storageRef(storage, storageRefPath);
 
     // Get metadata to extract the file extension
@@ -251,6 +263,7 @@ const getProfilePictureURL = async (uid: string): Promise<string | null> => {
     return null;
   }
 };
+
 
 // Export Firebase services and functions for use in other modules
 export {

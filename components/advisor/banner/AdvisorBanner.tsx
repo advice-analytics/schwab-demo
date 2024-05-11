@@ -153,21 +153,18 @@ const AdvisorBanner: React.FC = () => {
         </div>
       </div>
       {showValuePropPopup && (
-        <ValuePropPopup onClose={handleCloseValuePropPopup} valueProp="Load value">
+          <ValuePropPopup onClose={handleCloseValuePropPopup} valueProp="Load value">
           <ValueProp
-            uid={auth.currentUser?.uid || ''} // Use 'uid' instead of 'userId'
             initialValue="Default Value"
-            onValuePropChange={(newValueProp) => {
-              // Handle changes to the value proposition here if needed
-              saveValuePropToDatabase(auth.currentUser?.uid || '', newValueProp); // Save value proposition to database
-            }}
+            // The ValueProp component does not have an onValuePropChange prop
+            // This should be handled directly within ValueProp's implementation
           />
         </ValuePropPopup>
-      )}
+        )}
       {showAdvisorInfo && (
         <AdvisorInfo
           userEmail="askme@adviceanalytics.com" // Fixed userEmail as "askme"
-          valuePropId={valuePropId || '8whJ2'} // Set a default commsID if valuePropId is empty
+          valuePropId={valuePropId || 'defaultCommsID'} // Set a default commsID if valuePropId is empty
           onClose={() => setShowAdvisorInfo(false)}
         />
       )}

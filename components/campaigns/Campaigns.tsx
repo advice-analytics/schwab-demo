@@ -2,17 +2,17 @@
 
 import React, { useState, useEffect } from 'react';
 import { Campaign } from '@/types/CampaignTypes';
-import { saveCampaignToDatabase, deleteCampaignFromDatabase } from '@/utilities/firebaseClient';
+import { saveCampaignToDatabase, deleteCampaignFromDatabase, getCampaignsForUser } from '@/utilities/firebaseClient';
 import { generateCampaignPrompt } from '@/utilities/promptGenAI';
-import { useAuth, UserData } from '../context/authContext';
+import { useAuth } from '../context/authContext';
 import { Participant } from '@/types/ParticipantTypes';
 
 interface CampaignsProps {
+  uid: string;
   selectedClient: Participant | null;
-  uid: string; // Add the uid property to CampaignsProps
 }
 
-const Campaigns: React.FC<CampaignsProps> = ({ selectedClient }) => {
+const Campaigns: React.FC<CampaignsProps> = ({ uid, selectedClient }) => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [newCampaignName, setNewCampaignName] = useState<string>('');
   const [selectedPlan, setSelectedPlan] = useState('558'); // Default to '558'
@@ -49,6 +49,8 @@ const Campaigns: React.FC<CampaignsProps> = ({ selectedClient }) => {
       setSelectedScenario([...selectedScenario, option]);
     }
   };
+
+
 
   const clearInputFields = () => {
     setNewCampaignName('');
@@ -92,7 +94,7 @@ const Campaigns: React.FC<CampaignsProps> = ({ selectedClient }) => {
         plan: selectedPlan,
       };
 
-      await saveCampaignToDatabase(userId, campaignData); // Use userId for Firebase operations
+      await saveCampaignToDatabase(campaignData);
       setCampaigns([...campaigns, campaignData]);
       clearInputFields();
       alert('Campaign created successfully!');
@@ -135,7 +137,7 @@ const Campaigns: React.FC<CampaignsProps> = ({ selectedClient }) => {
     try {
       const campaignToUpdate: Campaign | undefined = campaigns.find((campaign) => campaign.id === campaignId);
       if (campaignToUpdate) {
-        await saveCampaignToDatabase(userId, campaignToUpdate); // Use userId for Firebase operations
+        await saveCampaignToDatabase(campaignToUpdate);
         alert('Campaign message updated successfully!');
       }
     } catch (error) {
@@ -148,7 +150,7 @@ const Campaigns: React.FC<CampaignsProps> = ({ selectedClient }) => {
     navigator.clipboard.writeText(prompt);
     alert('Campaign message copied to clipboard!');
   };
-
+  
   return (
     <div className="container mx-auto p-4">
       <h2 className="text-3xl font-semibold mb-8 text-navyblue">New Campaign</h2>
@@ -210,7 +212,11 @@ const Campaigns: React.FC<CampaignsProps> = ({ selectedClient }) => {
           </div>
         </div>
         <div>
+
+         
           <label htmlFor="ageGroup" className="block text-sm font-medium text-gray-600 text-navyblue">
+          <p>Lets build the target participant list for the campaigns</p>
+          <br></br>
             Age Group
           </label>
           <div className="flex flex-wrap">
@@ -273,45 +279,45 @@ const Campaigns: React.FC<CampaignsProps> = ({ selectedClient }) => {
 
       <h2 className="text-3xl font-semibold mt-8 mb-4 text-navyblue">Existing Campaigns</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {campaigns.map((campaign) => (
-          <div key={campaign.id} className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-lg font-semibold mb-2">{campaign.name}</h3>
-            <p>Type: {campaign.type}</p>
-            <p>Age Group: {campaign.ageGroup}</p>
-            <div className="my-4">
-              <strong>Prompt:</strong>
-              <textarea
-                value={campaign.prompt ?? ''}
-                onChange={(e) => handleEditPrompt(campaign.id, e.target.value)}
-                placeholder="Edit campaign message..."
-                rows={4}
-                className="input-field shadow-md px-4 py-3 rounded-lg w-full resize-none"
-                style={{ minHeight: '100px' }}
-              />
-              <div className="flex flex-col sm:flex-row justify-center items-center mt-4">
-                <button
-                  onClick={() => handleSavePrompt(userId, campaign.id)}
-                  className="btn-primary bg-green-500 text-white rounded-md py-1 px-2 my-2 w-full sm:w-auto"
-                >
-                  Save
-                </button>
-                <button
-                  onClick={() => handleCopyPrompt(campaign.prompt ?? '')}
-                  className="btn-primary bg-blue-500 text-white rounded-md py-1 px-2 my-2 w-full sm:w-auto"
-                >
-                  Copy
-                </button>
-                <button
-                  onClick={() => handleDeleteCampaign(campaign.id)}
-                  className="btn-delete bg-red-500 text-white rounded-md py-1 px-2 my-2 w-full sm:w-auto"
-                >
-                  Delete
-                </button>
-              </div>
+      {campaigns.map((campaign) => (
+        <div key={campaign.id} className="bg-white p-6 rounded-lg shadow-md">
+          <h3 className="text-lg font-semibold mb-2">{campaign.name}</h3>
+          <p>Type: {campaign.type}</p>
+          <p>Age Group: {campaign.ageGroup}</p>
+          <div className="my-4">
+            <strong>Prompt:</strong>
+            <textarea
+              value={campaign.prompt ?? ''}
+              onChange={(e) => handleEditPrompt(campaign.id, e.target.value)}
+              placeholder="Edit campaign message..."
+              rows={4}
+              className="input-field shadow-md px-4 py-3 rounded-lg w-full resize-none"
+              style={{ minHeight: '100px' }}
+            />
+            <div className="flex flex-col sm:flex-row justify-center items-center mt-4">
+              <button
+                onClick={() => handleSavePrompt(uid, campaign.id)}
+                className="btn-primary bg-green-500 text-white rounded-md py-1 px-2 my-2 w-full sm:w-auto"
+              >
+                Save
+              </button>
+              <button
+                onClick={() => handleCopyPrompt(campaign.prompt ?? '')}
+                className="btn-primary bg-blue-500 text-white rounded-md py-1 px-2 my-2 w-full sm:w-auto"
+              >
+                Copy
+              </button>
+              <button
+                onClick={() => handleDeleteCampaign(campaign.id)}
+                className="btn-delete bg-red-500 text-white rounded-md py-1 px-2 my-2 w-full sm:w-auto"
+              >
+                Delete
+              </button>
             </div>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
+    </div>
     </div>
   );
 };

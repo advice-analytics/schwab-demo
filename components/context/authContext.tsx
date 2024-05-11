@@ -1,5 +1,5 @@
-'use client'
 
+'use client'
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { auth } from '@/utilities/firebaseClient'; // Import Firebase auth service
 
@@ -18,24 +18,26 @@ const AuthContext = createContext<[UserData, React.Dispatch<React.SetStateAction
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [userData, setUserData] = useState<UserData>({ uid: null });
 
-  // Listen to authentication state changes
+  // Automatically sign in with predefined email and UID on component mount
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        // Check the user's email to set a specific UID for askme@adviceanalytics.com
-        const userEmail = user.email;
-        if (userEmail === 'askme@adviceanalytics.com') {
-          setUserData({ uid: 'vD4s1ZlqFGg74xXMGDwEeOV8whJ2' });
-        } else {
-          setUserData({ uid: user.uid });
-        }
-      } else {
-        setUserData({ uid: null });
-      }
-    });
+    const signInUserAutomatically = async () => {
+      try {
+        // Sign in with predefined email and UID
+        const predefinedEmail = 'askme@adviceanalytics.com';
+        const predefinedUID = 'Dw33e1WBrVfeBr74eYi0qQKwvuz1';
 
-    return () => unsubscribe(); // Unsubscribe on component unmount
-  }, []);
+        // Set user data with predefined UID
+        setUserData({ uid: predefinedUID });
+      } catch (error) {
+        console.error('Error signing in automatically:', error);
+      }
+    };
+
+    // Call the automatic sign-in function when component mounts
+    signInUserAutomatically();
+
+    // Cleanup function (unsubscribe) can be added here if needed
+  }, []); // Empty dependency array means this effect runs only once on mount
 
   // Provide userData and setUserData through context provider
   return <AuthContext.Provider value={[userData, setUserData]}>{children}</AuthContext.Provider>;

@@ -1,6 +1,8 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
+import { signInUserWithEmailAndPassword } from '@/utilities/firebaseClient';
+import { useAuth } from '@/components/context/authContext';
 import AdvisorBanner from '@/components/advisor/banner/AdvisorBanner';
 import PlanTable from '@/components/advisor/tables/PlanTable';
 import ParticipantTable from '@/components/advisor/tables/ParticipantTable';
@@ -10,8 +12,7 @@ import Campaigns from '@/components/campaigns/Campaigns';
 import PlanHealth from '@/components/health/PlanHealth';
 import { Plan, Client } from '@/types/PlanTypes';
 import { Participant } from '@/types/ParticipantTypes';
-import { useAuth } from '@/components/context/authContext';
-import { getValuePropFromDatabase, saveValuePropToDatabase, signInUserWithEmailAndPassword } from '@/utilities/firebaseClient';
+import { saveValuePropToDatabase } from '@/utilities/firebaseClient';
 
 interface NavigationItem {
   id: number;
@@ -40,47 +41,48 @@ const Page: React.FC = () => {
   const userUid: string = userData?.uid || '';
 
   useEffect(() => {
-    const signInUser = async () => {
+    const fetchData = async () => {
+      try {
+        const [plansResponse, participantsResponse] = await Promise.all([
+          fetch('/api/plans'),
+          fetch('/api/participants')
+        ]);
+
+        if (!plansResponse.ok || !participantsResponse.ok) {
+          throw new Error('Failed to fetch data');
+        }
+
+        const plansData: Plan[] = await plansResponse.json();
+        const participantsData: Participant[] = await participantsResponse.json();
+
+        setPlans(plansData);
+        setParticipants(participantsData);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    const signInAndFetchData = async () => {
       try {
         // Sign in the predefined user with provided credentials
-        await signInUserWithEmailAndPassword('askme@adviceanalytics.com', 'Dw33e1WBrVfeBr74eYi0qQKwvuz1');
+        await signInUserWithEmailAndPassword('askme@adviceanalytics.com', '');
         console.log('User signed in successfully.');
 
         // Fetch data after successful sign-in
         fetchData();
       } catch (error) {
         console.error('Error signing in:', error);
+        setLoading(false); // Update loading state to false in case of error
       }
     };
 
     if (!userData) {
-      signInUser(); // Sign in user only if not already authenticated
+      signInAndFetchData(); // Sign in user and fetch data if not already authenticated
     } else {
       fetchData(); // Fetch data if user is already authenticated
     }
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      const [plansResponse, participantsResponse] = await Promise.all([
-        fetch('/api/plans'),
-        fetch('/api/participants')
-      ]);
-
-      if (!plansResponse.ok || !participantsResponse.ok) {
-        throw new Error('Failed to fetch data');
-      }
-
-      const plansData: Plan[] = await plansResponse.json();
-      const participantsData: Participant[] = await participantsResponse.json();
-
-      setPlans(plansData);
-      setParticipants(participantsData);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
+  }, [userData]); // Include userData in the dependency array to trigger effect when auth state changes
 
   const handleNavigationItemClick = (item: NavigationItem) => {
     setSelectedNavItem(item);
@@ -104,7 +106,8 @@ const Page: React.FC = () => {
 
   const handleValuePropChange = async (newValueProp: string) => {
     try {
-      await saveValuePropToDatabase(userUid, newValueProp);
+      // Save value prop to database using user UID
+      await saveValuePropToDatabase(newValueProp);
       console.log('ValueProp saved successfully:', newValueProp);
     } catch (error) {
       console.error('Error saving ValueProp:', error);
@@ -138,9 +141,7 @@ const Page: React.FC = () => {
       case 'Value Proposition':
         return (
           <ValueProp
-            uid={userUid}
-            onValuePropChange={handleValuePropChange}
-            initialValue={initialValue}
+          initialValue="Default Value"
           />
         );
       case 'Plan Campaigns':
