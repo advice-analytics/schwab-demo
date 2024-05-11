@@ -106,10 +106,6 @@ const AdvisorInfo: React.FC<AdvisorInfoProps> = ({ valuePropId, onClose }) => {
           <strong>CommsID:</strong> {valuePropId}
         </p>
         <div className="settings">
-          <label className="file-upload-btn">
-            Upload Plan Data
-            <input type="file" onChange={handleFileInputChange} className="file-input" />
-          </label>
           <button className="download-example-btn" onClick={handleDownloadExampleData}>
             Download Example Data
           </button>
@@ -170,3 +166,4 @@ const AdvisorInfo: React.FC<AdvisorInfoProps> = ({ valuePropId, onClose }) => {
 };
 
 export default AdvisorInfo;
+

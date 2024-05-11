@@ -135,8 +135,8 @@ const AdvisorBanner: React.FC = () => {
           />
         </div>
         <div className="advisor-info text-right">
-          <div className="username text-yellow-300 text-sm">askme@adviceanalytics.com</div> {/* Fixed username display */}
-          <div className="commsid text-sm text-white">Your CommsID: <span className="valuePropId text-green-400">8whJ2</span></div>
+          <div className="username text-yellow-300 text-sm">{userEmail || 'Guest'}</div>
+          <div className="commsid text-sm text-white">Your CommsID: <span className="valuePropId text-green-400">{valuePropId || 'WVUZ1'}</span></div>
           <div className="value-prop-link text-sm cursor-pointer underline" onClick={handleValuePropClick}>Value Proposition</div>
         </div>
         <div className="gear-icon cursor-pointer" onClick={handleGearIconClick}>
@@ -153,18 +153,14 @@ const AdvisorBanner: React.FC = () => {
         </div>
       </div>
       {showValuePropPopup && (
-          <ValuePropPopup onClose={handleCloseValuePropPopup} valueProp="Load value">
-          <ValueProp
-            initialValue="Default Value"
-            // The ValueProp component does not have an onValuePropChange prop
-            // This should be handled directly within ValueProp's implementation
-          />
+        <ValuePropPopup onClose={handleCloseValuePropPopup} valueProp="Load value">
+          <ValueProp initialValue="Default Value" />
         </ValuePropPopup>
-        )}
+      )}
       {showAdvisorInfo && (
         <AdvisorInfo
-          userEmail="askme@adviceanalytics.com" // Fixed userEmail as "askme"
-          valuePropId={valuePropId || 'defaultCommsID'} // Set a default commsID if valuePropId is empty
+          userEmail={userEmail || 'Guest'}
+          valuePropId={valuePropId || 'WVUZ1'}
           onClose={() => setShowAdvisorInfo(false)}
         />
       )}
