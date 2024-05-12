@@ -68,7 +68,7 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem }) => {
 
     const fetchInitialValue = async () => {
       try {
-        const valueFromDatabase = await getValuePropFromDatabase(userUid);
+        const valueFromDatabase = await getValuePropFromDatabase();
         setInitialValue(valueFromDatabase || ''); // Set initial value or default to empty string
       } catch (error) {
         console.error('Error fetching initial value:', error);
@@ -99,7 +99,7 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem }) => {
 
   const handleValuePropChange = async (newValueProp: string) => {
     try {
-      await saveValuePropToDatabase(userUid, newValueProp);
+      await saveValuePropToDatabase(newValueProp);
       console.log('ValueProp saved successfully:', newValueProp);
     } catch (error) {
       console.error('Error saving ValueProp:', error);
@@ -119,7 +119,7 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem }) => {
         return (
           <>
             <div className={'flex flex-row-reverse justify-between'}>
-              <Link href={'/advisor/create-plan'} target={'_blank'}>
+              <Link href={'/create-plan'} target={'_blank'}>
                 <button
                   className={'btn-primary bg-navyblue hover:bg-darknavyblue text-white rounded-md pl-5 pr-5 h-11 font-medium'}
                 >
@@ -142,8 +142,6 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem }) => {
       case 'Value Proposition':
         return (
           <ValueProp
-            uid={userUid} // Pass userUid directly as uid
-            onValuePropChange={handleValuePropChange}
             initialValue={initialValue} // Pass the fetched initial value to ValueProp
           />
         );
@@ -152,12 +150,7 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem }) => {
       case 'Value Prop':
         return (
           <ValueProp
-            uid={auth.currentUser?.uid || ''} // Use 'uid' instead of 'userId'
             initialValue="Default Value"
-            onValuePropChange={(newValueProp) => {
-              // Handle changes to the value proposition here if needed
-              saveValuePropToDatabase(auth.currentUser?.uid || '', newValueProp); // Save value proposition to database
-            }}
           />
         )
       case 'Create Plan':

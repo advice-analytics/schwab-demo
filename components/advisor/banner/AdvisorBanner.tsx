@@ -5,7 +5,9 @@ import Image from 'next/image';
 import { auth } from '@/utilities/firebaseClient';
 import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import AdvisorInfo from './AdvisorInfo';
-import Link from "next/link"; // Import Firebase functions
+import ValuePropPopup from '../value/ValuePropPopup';
+import ValueProp from '../value/ValueProp';
+import { saveValuePropToDatabase } from '@/utilities/firebaseClient'; // Import Firebase functions
 
 const serviceCategories = [
   { name: 'Retirement', icon: 'retirement-light.svg' },
@@ -15,13 +17,12 @@ const serviceCategories = [
   { name: 'Estate Plans', icon: 'estate-light.svg' },
 ];
 
-const storage = getStorage();
-
 const AdvisorBanner: React.FC = () => {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(null);
   const [valuePropId, setValuePropId] = useState<string>('');
   const [loadingProfile, setLoadingProfile] = useState<boolean>(true);
+  const [showValuePropPopup, setShowValuePropPopup] = useState<boolean>(false);
   const [showAdvisorInfo, setShowAdvisorInfo] = useState<boolean>(false);
 
   useEffect(() => {
@@ -46,7 +47,7 @@ const AdvisorBanner: React.FC = () => {
   const loadProfilePicture = async (uid: string) => {
     try {
       const storageRefPath = `profilePictures/${uid}.png`;
-      const storageReference = storageRef(storage, storageRefPath);
+      const storageReference = storageRef(getStorage(), storageRefPath);
       const downloadUrl = await getDownloadURL(storageReference);
       setProfilePictureUrl(downloadUrl);
       setLoadingProfile(false);
@@ -57,7 +58,7 @@ const AdvisorBanner: React.FC = () => {
   };
 
   const handleFileInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files && event.target.files[0];
+    const file = event.target.files?.[0];
     if (file) {
       try {
         setLoadingProfile(true);
@@ -67,7 +68,7 @@ const AdvisorBanner: React.FC = () => {
         }
 
         const storageRefPath = `profilePictures/${uid}.png`;
-        const storageReference = storageRef(storage, storageRefPath);
+        const storageReference = storageRef(getStorage(), storageRefPath);
         const uploadTask = uploadBytesResumable(storageReference, file);
 
         uploadTask.on(
@@ -94,6 +95,14 @@ const AdvisorBanner: React.FC = () => {
         setLoadingProfile(false);
       }
     }
+  };
+
+  const handleValuePropClick = () => {
+    setShowValuePropPopup(true);
+  };
+
+  const handleCloseValuePropPopup = () => {
+    setShowValuePropPopup(false);
   };
 
   const handleGearIconClick = () => {
@@ -126,14 +135,9 @@ const AdvisorBanner: React.FC = () => {
           />
         </div>
         <div className="advisor-info text-right">
-          <div className="username text-yellow-300 text-sm">{userEmail}</div>
-          <div className="commsid text-sm text-white">Your CommsID: <span className="valuePropId text-green-400">{valuePropId}</span></div>
-          <Link
-            className="value-prop-link text-sm cursor-pointer underline"
-            href={'/advisor/value-prop'}
-          >
-            Value Proposition
-          </Link>
+          <div className="username text-yellow-300 text-sm">{userEmail || 'askme@adviceanalytics.com'}</div>
+          <div className="commsid text-sm text-white">Your CommsID: <span className="valuePropId text-green-400">{valuePropId || 'WVUZ1'}</span></div>
+          <div className="value-prop-link text-sm cursor-pointer underline" onClick={handleValuePropClick}>Value Proposition</div>
         </div>
         <div className="gear-icon cursor-pointer" onClick={handleGearIconClick}>
           <Image src="/gear.png" alt="Settings" width={30} height={30} />
@@ -148,10 +152,15 @@ const AdvisorBanner: React.FC = () => {
           ))}
         </div>
       </div>
+      {showValuePropPopup && (
+        <ValuePropPopup onClose={handleCloseValuePropPopup} valueProp="Load value">
+          <ValueProp initialValue="Default Value" />
+        </ValuePropPopup>
+      )}
       {showAdvisorInfo && (
         <AdvisorInfo
-          userEmail={userEmail}
-          valuePropId={valuePropId}
+          userEmail={userEmail || 'Guest'}
+          valuePropId={valuePropId || 'WVUZ1'}
           onClose={() => setShowAdvisorInfo(false)}
         />
       )}
