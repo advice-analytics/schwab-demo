@@ -94,7 +94,7 @@ const Campaigns: React.FC<CampaignsProps> = ({ selectedClient, uid = '' }) => {
                 plan: selectedPlan,
             };
 
-            await saveCampaignToDatabase(uid, campaignData);
+            await saveCampaignToDatabase(campaignData);
             setCampaigns([...campaigns, campaignData]);
             clearInputFields();
             alert('Campaign created successfully!');

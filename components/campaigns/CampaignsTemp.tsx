@@ -29,7 +29,7 @@ const CampaignsTemp: React.FC<CampaignsProps> = ({ selectedClient, uid = '' }) =
         try {
             const campaignToUpdate: Campaign | undefined = campaigns.find((campaign) => campaign.id === campaignId);
             if (campaignToUpdate) {
-                await saveCampaignToDatabase(uid, campaignToUpdate);
+                await saveCampaignToDatabase(campaignToUpdate);
                 alert('Campaign message updated successfully!');
             }
         } catch (error) {
