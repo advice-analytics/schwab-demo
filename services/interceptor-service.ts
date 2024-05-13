@@ -23,6 +23,7 @@ class InterceptorService {
             }
         }
 
+        localStorage.setItem('accessToken', accessToken);
         headers['Authorization'] = `Bearer ${accessToken}`;
 
         return headers;
