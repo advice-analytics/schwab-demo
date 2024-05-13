@@ -1,7 +1,7 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-import {useRouter, useSearchParams} from "next/navigation";
-import {AxiosResponse} from "axios";
+import { useRouter, useSearchParams } from "next/navigation";
+import { AxiosResponse } from "axios";
 
 import httpService from "@/services/http-service";
 import FavoriteIcon from "@/components/participants-and-campaigns/FavoriteIcon";
@@ -68,6 +68,7 @@ const ParticipantDetail = () => {
         <div className={'flex flex-col gap-y-3'}>
           <div className={'flex justify-between items-center'}>
             <p className={'text-navyblue'}>Plan: {participantData?.plan_name}</p>
+            <p className={'text-navyblue'}>IdPerson: {participantData?.external_id}</p>
             <div>
               <div className={'flex flex-row-reverse'}>
                 <FavoriteIcon width={30} height={30} planId={planId} participantId={participantId} />
@@ -136,7 +137,7 @@ const ParticipantDetail = () => {
           <b>Notes:</b>
           <textarea
             className={'rounded w-full h-40 outline-none py-3 px-3.5 resize-none'}
-            style={{border: '1px solid lightgrey'}}
+            style={{ border: '1px solid lightgrey' }}
             placeholder={'Enter here...'}
             ref={notesRef}
           />

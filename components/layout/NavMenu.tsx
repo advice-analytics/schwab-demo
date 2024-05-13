@@ -10,10 +10,9 @@ import HeaderNavLink from './HeaderNavLink';
 
 const menuItems = [
   { label: `Advisor`, url: `/` },
-  { label: 'Log out', url: '/' },
 ];
 
-const NavMenu: React.FC<NavMenuProps> = ({}) => {
+const NavMenu: React.FC<NavMenuProps> = ({ }) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -109,6 +108,6 @@ const NavMenu: React.FC<NavMenuProps> = ({}) => {
   );
 };
 
-interface NavMenuProps {}
+interface NavMenuProps { }
 
 export default NavMenu;
