@@ -98,7 +98,7 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans }) => {
           <tbody>
             {plans.map((plan: Plan, index: number) => (
               <tr key={plan.id} style={{ borderBottom: '1px solid #ccc', whiteSpace: 'nowrap' }}>
-                <td style={{ padding: '12px', textAlign: 'center' }}>{index + 1}</td>
+                <td style={{ padding: '12px', textAlign: 'center' }}>{plan.external_id}</td>
                 {!isMobileView && (
                   <td style={{ padding: '12px', textAlign: 'center' }}>{plan.participant_count ?? 0}</td>
                 )}
