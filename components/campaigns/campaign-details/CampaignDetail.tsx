@@ -68,7 +68,7 @@ const CampaignDetail: React.FC<{ planId: string; campaignId: string; }> = ({ pla
         <thead>
         <tr style={{backgroundColor: '#144e74', color: 'white', textAlign: 'center'}}>
           <th style={{padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap'}}>Id</th>
-          <th style={{padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap'}}>Advise Score</th>
+          <th style={{padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap'}}>Advice Score</th>
           <th style={{padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap'}}>Top Interest</th>
           <th>Actions</th>
         </tr>
@@ -78,7 +78,7 @@ const CampaignDetail: React.FC<{ planId: string; campaignId: string; }> = ({ pla
           <tr key={index} style={tableRowStyle}>
             <td style={cellStyle}>
               <p
-                className={'underline text-navyblue cursor-pointer'}
+                className={'underline text-navyblue cursor-pointer inline-block'}
                 onClick={() => handleParticipantClick(participant.id)}
               >
                 {participant.external_id}

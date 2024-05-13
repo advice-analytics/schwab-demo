@@ -13,8 +13,8 @@ interface FavoriteIconProps {
   participantId: string | null;
 }
 
-const FavoriteIcon: React.FC<FavoriteIconProps> = ({ filled, width, height, planId, participantId }) => {
-  const [filledIcon, setFilledIcon] = useState<boolean>(filled ?? false);
+const FavoriteIcon: React.FC<FavoriteIconProps> = ({ width, height, planId, participantId, filled = false }) => {
+  const [filledIcon, setFilledIcon] = useState<boolean>(filled);
 
   const handleStarClick = async () => {
     try {

@@ -72,7 +72,7 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
             >
               <td style={{ padding: '12px', textAlign: 'center' }}>
                 <div
-                  className={'flex justify-center items-center gap-x-2 w-full underline text-navyblue cursor-pointer'}
+                  className={'inline-flex justify-center items-center gap-x-2 underline text-navyblue cursor-pointer'}
                   onClick={() => handleParticipantSelect(participant)}
                 >
                   {participant.external_id}
@@ -84,7 +84,7 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
               </td>
               <td>
                 <div className={'flex justify-center'}>
-                  <FavoriteIcon width={24} height={24} planId={planId} participantId={participant.id} />
+                  <FavoriteIcon width={24} height={24} planId={planId} participantId={participant.id} filled={participant.is_favorite} />
                 </div>
               </td>
             </tr>

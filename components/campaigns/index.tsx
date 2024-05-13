@@ -84,7 +84,7 @@ const Index: React.FC<CampaignsProps> = ({ planId }) => {
         <thead>
         <tr style={{ backgroundColor: '#144e74', color: 'white', textAlign: 'center' }}>
           <th style={{ padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap' }}>Name</th>
-          <th style={{ padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap' }}># On List</th>
+          <th style={{ padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap' }}>#On List</th>
           <th style={{ padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap' }}>Last Update</th>
           <th>Actions</th>
         </tr>
@@ -103,7 +103,7 @@ const Index: React.FC<CampaignsProps> = ({ planId }) => {
               <td style={cellStyle}>{campaign.count}</td>
               <td style={cellStyle}>{campaign.last_update_date}</td>
               <td>
-                <div className={'w-full flex pl-2 items-center gap-x-2'}>
+                <div className={'w-full pl-2 flex flex-col gap-y-1 md:flex-row items-center md:gap-x-2'}>
                   <Image src={'/download.png'} alt={''} width={30} height={30} className={'cursor-pointer'} onClick={
                     () => handleDownload(campaign.id, campaign.name)
                   } />
