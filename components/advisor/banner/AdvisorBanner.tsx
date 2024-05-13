@@ -123,7 +123,7 @@ const AdvisorBanner: React.FC = () => {
         </div>
         <div className="advisor-info text-right">
           <div className="username text-yellow-300 text-sm">askme@adviceanalytics.com</div>
-          <div className="commsid text-sm text-white">Your CommsID: <span className="valuePropId text-green-400">{valuePropId}</span></div>
+          <div className="commsid text-sm text-white">Your CommsID: <span className="valuePropId text-green-400">CA4G5</span></div>
           <p
             className="value-prop-link text-sm underline opacity-30"
             // href={'/value-prop'}

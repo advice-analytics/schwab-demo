@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import {useSearchParams} from "next/navigation";
-import {AxiosResponse} from "axios";
+import { useSearchParams } from "next/navigation";
+import { AxiosResponse } from "axios";
 
 import httpService from "@/services/http-service";
 import FavoriteIcon from "@/components/participants-and-campaigns/FavoriteIcon";
@@ -39,15 +39,19 @@ const ParticipantDetail = () => {
     const data: {
       exclude_from: string[];
       include_in: string[];
+      notes: string;
     } = {
       exclude_from: [],
-      include_in: []
+      include_in: [],
+      notes: ''
     };
 
     Object.keys(campaigns).forEach((campaign) => {
       campaigns[campaign] ? data.include_in.push(campaign) : data.exclude_from.push(campaign);
     });
-
+    if (participantData?.notes) {
+      data.notes = participantData?.notes;
+    }
     try {
       const response: AxiosResponse = await httpService.post(`/v1/advisor/plan/${planId}/participant/${participantId}/campaigns`, data);
     }
@@ -81,14 +85,14 @@ const ParticipantDetail = () => {
             <b>Advice Score Details</b>
             <div className={'flex flex-col md:flex-row md:gap-x-14'}>
               <div>
-                <Score label={'Retirement'} value={participantData?.retirement_score} style={{ color: 'green' }} />
-                <Score label={'Investment'} value={participantData?.investing_score} />
-                <Score label={'Tax Planning'} value={participantData?.taxes_score} />
+                <Score label={'Retirement'} value={participantData?.retirement_score} scoreRight />
+                <Score label={'Investment'} value={participantData?.investing_score} scoreRight />
+                <Score label={'Tax Planning'} value={participantData?.taxes_score} scoreRight />
               </div>
               <div>
-                <Score label={'Financial Planning'} value={participantData?.finances_score} style={{ color: 'orange' }} />
-                <Score label={'Estate Planning'} value={participantData?.estate_score} style={{ color: 'green' }} />
-                <Score label={'Advice Score'} value={participantData?.advice_score} />
+                <Score label={'Financial Planning'} value={participantData?.finances_score} scoreRight />
+                <Score label={'Estate Planning'} value={participantData?.estate_score} scoreRight />
+                <Score label={'Advisor Score'} value={participantData?.advice_score} scoreRight />
               </div>
             </div>
           </div>
@@ -137,6 +141,8 @@ const ParticipantDetail = () => {
             style={{ border: '1px solid lightgrey' }}
             placeholder={'Enter here...'}
             ref={notesRef}
+            value={participantData?.notes}
+            onChange={e => setParticipantData({ ...participantData, notes: e.target.value })}
           />
         </div>
         <div className={'text-center mt-3'}>

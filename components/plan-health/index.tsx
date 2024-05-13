@@ -38,7 +38,7 @@ const Index = () => {
           nudge messaging</p>
       </div>
       <div className={'border border-solid'}/>
-      <b>{planData?.name} Profit Sharing Plan</b>
+      <b>{planData?.name}</b>
       <div className={'flex flex-col gap-y-2'}>
         <b>Plan Health Score</b>
         {planData && <img src={'/chart.png'} alt={''} className={'w-full md:w-[20rem]'} />}
