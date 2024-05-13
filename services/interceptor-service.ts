@@ -1,6 +1,7 @@
 import type {AxiosInstance, Method} from 'axios';
 import axios from 'axios';
 import {getQueryParam} from "@/utilities/utils";
+import loaderService from "@/services/loader-service";
 
 class InterceptorService {
     instance: AxiosInstance;
@@ -60,13 +61,18 @@ class InterceptorService {
         }
 
         try {
+            loaderService.showLoader(true);
             return await this.instance(config);
         } catch (error: any) {
             if (error.response.status === 401 || error.response.status === 403) {
+                localStorage.removeItem('accessToken');
                 window.location.href = '/';
                 return;
             }
             throw error;
+        }
+        finally {
+            loaderService.showLoader(false);
         }
     }
 }

@@ -2,6 +2,8 @@ import React, { useRef } from 'react';
 
 import Image from "next/image";
 
+import { BsSearch } from "react-icons/bs";
+
 const Search: React.FC<{ handleSearch: any }> = ({ handleSearch }) => {
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -17,7 +19,7 @@ const Search: React.FC<{ handleSearch: any }> = ({ handleSearch }) => {
         className={`bg-navyblue h-11 text-white rounded-r py-1 px-4`}
         onClick={() => handleSearch(searchInputRef.current?.value)}
       >
-        <Image src={'/search.png'} alt={''} width={20} height={20}/>
+        <BsSearch />
       </button>
     </div>
   );

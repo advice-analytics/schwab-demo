@@ -21,7 +21,7 @@ const AdvisorBanner: React.FC = () => {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(null);
   const [valuePropId, setValuePropId] = useState<string>('');
-  const [loadingProfile, setLoadingProfile] = useState<boolean>(true);
+  const [loadingProfile, setLoadingProfile] = useState<boolean>(false);
   const [showAdvisorInfo, setShowAdvisorInfo] = useState<boolean>(false);
 
   useEffect(() => {
@@ -74,7 +74,6 @@ const AdvisorBanner: React.FC = () => {
           'state_changed',
           null,
           (error: any) => {
-            console.error('Error uploading profile picture:', error);
             setLoadingProfile(false);
           },
           async () => {
@@ -82,15 +81,12 @@ const AdvisorBanner: React.FC = () => {
               const downloadUrl = await getDownloadURL(storageReference);
               setProfilePictureUrl(downloadUrl);
               setLoadingProfile(false);
-              console.log('Profile picture uploaded successfully!');
             } catch (error) {
-              console.error('Error getting download URL:', error);
               setLoadingProfile(false);
             }
           }
         );
       } catch (error) {
-        console.error('Error uploading profile picture:', error);
         setLoadingProfile(false);
       }
     }
@@ -126,16 +122,21 @@ const AdvisorBanner: React.FC = () => {
           />
         </div>
         <div className="advisor-info text-right">
-          <div className="username text-yellow-300 text-sm">{userEmail}</div>
+          <div className="username text-yellow-300 text-sm">askme@adviceanalytics.com</div>
           <div className="commsid text-sm text-white">Your CommsID: <span className="valuePropId text-green-400">{valuePropId}</span></div>
-          <Link
-            className="value-prop-link text-sm cursor-pointer underline"
-            href={'/advisor/value-prop'}
+          <p
+            className="value-prop-link text-sm underline opacity-30"
+            // href={'/value-prop'}
+            title={'Coming Soon...'}
           >
             Value Proposition
-          </Link>
+          </p>
         </div>
-        <div className="gear-icon cursor-pointer" onClick={handleGearIconClick}>
+        <div
+          className="gear-icon cursor-pointer"
+          // onClick={handleGearIconClick
+          title={'Coming Soon...'}
+        >
           <Image src="/gear.png" alt="Settings" width={30} height={30} />
         </div>
       </div>

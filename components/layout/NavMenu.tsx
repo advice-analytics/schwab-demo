@@ -9,7 +9,7 @@ import LogoImage from '@/public/commsai.png';
 import HeaderNavLink from './HeaderNavLink';
 
 const menuItems = [
-  { label: `Advisor`, url: `advisor` },
+  { label: `Advisor`, url: `/` },
   { label: 'Log out', url: '/' },
 ];
 

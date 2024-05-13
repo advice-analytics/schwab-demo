@@ -33,7 +33,6 @@ const Participants: React.FC<ParticipantsProps> = ({ planId }) => {
     const fetchParticipants = async () => {
       try {
         const response = await httpService.get(`/v1/advisor/plan/${planId}/participants?page=${params.page}&page_size=${params.page_size}&search=${params.search}`);
-        console.log(response.data)
         setParticipantsData(response.data);
       }
       catch (error: any) {

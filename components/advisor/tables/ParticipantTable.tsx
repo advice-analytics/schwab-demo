@@ -24,73 +24,13 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
   setParams, getParams
 }: ParticipantTableProps) => {
   const [isMobileView, setIsMobileView] = useState<boolean>(false);
-  const [filterValue, setFilterValue] = useState<string>('');
   const [selectedParticipant, setSelectedParticipant] = useState<Participant | null>(null);
   const [showClientTablePopup, setShowClientTablePopup] = useState<boolean>(false);
   const selectedPage = getParams().page;
   const router = useRouter();
 
-  const filteredParticipants = selectedPlan
-    ? participants?.filter((participant) => participant.planId === selectedPlan.id)
-    : participants?.filter((participant) =>
-      Object.values(participant).some((value) =>
-        String(value).toLowerCase().includes(filterValue.toLowerCase())
-      )
-    );
-
-  const calculateSummary = (participants: Participant[]) => {
-    const totalParticipants = participants.length;
-    const totalBalance = participants.reduce((sum, participant) => sum + (participant.balance || 0), 0);
-    const averageAge =
-      totalParticipants > 0
-        ? participants.reduce((sum, participant) => sum + participant.age, 0) / totalParticipants
-        : 0;
-
-    return {
-      totalParticipants,
-      totalBalance,
-      averageAge,
-    };
-  };
-
-  const summary = calculateSummary(filteredParticipants);
-
-  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterValue(e.target.value);
-  };
-
   const handleParticipantSelect = (participant: Participant) => {
-    //setSelectedParticipant(participant);
-    //setShowClientTablePopup(true);
-    router.push(`/advisor/participant-detail?planId=${planId}&participantId=${participant.id}`);
-  };
-
-  const getTopStressor = (participant: Participant): string => {
-    const { retirement, financial, tax, investment, estate } = participant;
-
-    const stressors = [
-      { name: 'Retirement', score: retirement?.toString() },
-      { name: 'Financial', score: financial?.toString() },
-      { name: 'Tax', score: tax?.toString() },
-      { name: 'Investment', score: investment?.toString() },
-      { name: 'Estate', score: estate?.toString() },
-    ];
-
-    let topStressor = '';
-    let highestScore = -1;
-
-    stressors.forEach((stressor) => {
-      const { name, score } = stressor;
-
-      const numericScore = parseFloat(score);
-
-      if (!isNaN(numericScore) && numericScore > highestScore) {
-        highestScore = numericScore;
-        topStressor = name;
-      }
-    });
-
-    return topStressor;
+    router.push(`/participant-detail?planId=${planId}&participantId=${participant.id}`);
   };
 
   const checkScreenWidth = () => {
@@ -151,7 +91,13 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
           ))}
           </tbody>
         </table>
-        <div className={'flex justify-center items-center gap-x-3 w-full mb-3 mt-3'}>
+        <div className={'flex justify-center items-center gap-x-3 w-full mb-3 mt-6'}>
+          <button
+            className={`bg-gray-500 text-white rounded-md py-1 px-4`}
+            onClick={() => selectedPage !== 1 && handlePageButtonClick(1)}
+          >
+            Start
+          </button>
           <button
             className={`bg-gray-500 text-white rounded-md py-1 px-4`}
             disabled={selectedPage === 1}
@@ -159,13 +105,19 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
           >
             &lt;
           </button>
-          <p>{selectedPage} of {noOfPages}</p>
+          <p>{noOfPages ? selectedPage : 0} of {noOfPages}</p>
           <button
             className={`bg-gray-500 text-white rounded-md py-1 px-4`}
             onClick={() => handlePageButtonClick(selectedPage + 1)}
             disabled={selectedPage === noOfPages}
           >
             &gt;
+          </button>
+          <button
+            className={`bg-gray-500 text-white rounded-md py-1 px-4`}
+            onClick={() => selectedPage !== noOfPages && handlePageButtonClick(noOfPages)}
+          >
+            End
           </button>
         </div>
       </div>

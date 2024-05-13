@@ -10,7 +10,7 @@ import PlanTable from "@/components/advisor/tables/PlanTable";
 import ClientTable from "@/components/advisor/tables/ClientTable";
 import ValueProp from "@/components/advisor/value/ValueProp";
 import AdvisorBanner from "@/components/advisor/banner/AdvisorBanner";
-import PlanHealth from "@/components/health/PlanHealth";
+import PlanHealth from "@/components/plan-health";
 import { useRouter } from "next/navigation";
 import CreateCampaign from "@/components/campaigns/CreateCampaign";
 import CreatePlan from "@/components/plans/CreatePlan";
@@ -19,6 +19,7 @@ import httpService from "@/services/http-service";
 import {AxiosResponse} from "axios";
 import ParticipantDetail from "@/components/participants-and-campaigns/ParticipantDetail";
 import Index from "../campaigns/campaign-details";
+import Link from "next/link";
 
 interface NavigationItem {
   id: number;
@@ -35,7 +36,7 @@ let cachedPlans: Plan[] = [];
 
 const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem }) => {
   const [navigationItems] = useState<NavigationItem[]>([
-    { id: 1, label: 'All Plans', route: '/advisor' },
+    { id: 1, label: 'All Plans', route: '/' },
     { id: 3, label: 'Coming Soon...', disabled: true, route: '/' },
     { id: 4, label: 'Coming Soon...', disabled: true, route: '/' },
   ]);
@@ -61,7 +62,7 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem }) => {
         setPlans(plansData);
         cachedPlans = plansData;
       } catch (error) {
-        console.error('Error fetching plans:', error);
+        throw error;
       }
     };
 
@@ -70,7 +71,7 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem }) => {
         const valueFromDatabase = await getValuePropFromDatabase(userUid);
         setInitialValue(valueFromDatabase || ''); // Set initial value or default to empty string
       } catch (error) {
-        console.error('Error fetching initial value:', error);
+        throw error;
       }
     };
 
@@ -87,10 +88,6 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem }) => {
     setSelectedParticipant(null);
   };
 
-  const handleParticipantSelect = (participant: Participant) => {
-    setSelectedParticipant(participant);
-  };
-
   const handleHealthClick = (plan: Plan) => {
     setSelectedPlan(plan);
     setHealthModalOpen(true);
@@ -99,40 +96,32 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem }) => {
   const handleValuePropChange = async (newValueProp: string) => {
     try {
       await saveValuePropToDatabase(userUid, newValueProp);
-      console.log('ValueProp saved successfully:', newValueProp);
-    } catch (error) {
-      console.error('Error saving ValueProp:', error);
+    } catch (error: any) {
+      throw new Error(error);
     }
   };
-
-  const handlePlanSearch = async (searchText: string) => {
-    const results = cachedPlans.filter((plan: any) => {
-      return `${plan.planName}`.includes(searchText);
-    });
-    setPlans(results);
-  }
 
   const renderContent = () => {
     switch (activeItem) {
       case 'All Plans':
         return (
           <>
-            {/*<div className={'flex flex-row-reverse justify-between'}>*/}
-            {/*  <Link href={'/advisor/create-plan'} target={'_blank'}>*/}
-            {/*    <button*/}
-            {/*      className={'btn-primary bg-navyblue hover:bg-darknavyblue text-white rounded-md pl-5 pr-5 h-11 font-medium'}*/}
-            {/*    >*/}
-            {/*      Add Plan*/}
-            {/*    </button>*/}
-            {/*  </Link>*/}
-            {/*</div>*/}
-            <PlanTable plans={plans} onPlanSelect={handlePlanSelect} onHealthClick={handleHealthClick} />
+            <div className={'flex flex-row-reverse justify-between'}>
+              <Link href={'/create-plan'} target={'_blank'}>
+                <button
+                  className={'btn-primary bg-navyblue hover:bg-darknavyblue text-white rounded-md pl-5 pr-5 h-11 font-medium opacity-30'}
+                  title={'Coming soon...'}
+                  disabled
+                >
+                  Add Plan
+                </button>
+              </Link>
+            </div>
+            <PlanTable plans={plans} />
             {selectedParticipant && (
               <ClientTable
                 clients={selectedParticipant.clients || []}
-                onSelect={(client: Client) => {
-                  console.log('Client selected:', client);
-                }}
+                onSelect={(client: Client) => {}}
                 selectedParticipant={selectedParticipant}
               />
             )}
@@ -167,6 +156,8 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem }) => {
         return <ParticipantDetail />
       case 'Campaign Detail':
         return <Index />
+      case 'Plan Health':
+        return <PlanHealth />
       default:
         return null;
     }
@@ -193,16 +184,16 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem }) => {
       </div>
       <div className="content-container">
         {renderContent()}
-        {selectedPlan && (
-          <PlanHealth
-            isOpen={isHealthModalOpen}
-            onClose={() => {
-              setSelectedPlan(null);
-              setHealthModalOpen(false);
-            }}
-            plan={selectedPlan}
-          />
-        )}
+        {/*{selectedPlan && (*/}
+        {/*  <PlanHealth*/}
+        {/*    isOpen={isHealthModalOpen}*/}
+        {/*    onClose={() => {*/}
+        {/*      setSelectedPlan(null);*/}
+        {/*      setHealthModalOpen(false);*/}
+        {/*    }}*/}
+        {/*    plan={selectedPlan}*/}
+        {/*  />*/}
+        {/*)}*/}
       </div>
     </div>
   );

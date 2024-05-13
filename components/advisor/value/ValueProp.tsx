@@ -56,23 +56,6 @@ const ValueProp: React.FC<ValuePropProps> = ({ uid, onValuePropChange, initialVa
 
   useEffect(() => {
     const fetchValueProp = async () => {
-      // if (uid) { // Use uid instead of userId
-      //   setLoading(true);
-      //   try {
-      //     const fetchedValueProp = await getValuePropFromDatabase(uid); // Use uid instead of userId
-      //     if (fetchedValueProp !== undefined) {
-      //       setValueProp(fetchedValueProp);
-      //       setCurrentChars(fetchedValueProp.length);
-      //     } else {
-      //       setValueProp('');
-      //       setCurrentChars(0);
-      //     }
-      //   } catch (error) {
-      //     console.error('Error fetching value proposition:', error);
-      //   } finally {
-      //     setLoading(false);
-      //   }
-      // }
       try {
         const response: AxiosResponse = await httpService.get('/v1/advisor/profile');
         setValueProposition(response?.data);

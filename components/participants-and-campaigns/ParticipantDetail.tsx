@@ -104,7 +104,7 @@ const ParticipantDetail = () => {
                   }
 
                   return (
-                    <div key={index} className={'inline-flex gap-x-3 items-center'}>
+                    <div key={index} className={'flex gap-x-3 items-center'}>
                       <input
                         id={campaign.name}
                         type={'checkbox'}
@@ -117,7 +117,7 @@ const ParticipantDetail = () => {
                   )
                 })}
                 {participantData?.campaigns_out?.map((campaign: any, index: number) => (
-                  <div key={index} className={'inline-flex gap-x-3 items-center'}>
+                  <div key={index} className={'flex gap-x-3 items-center'}>
                     <input
                       id={campaign.name}
                       type={'checkbox'}

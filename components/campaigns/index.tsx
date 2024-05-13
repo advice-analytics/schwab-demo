@@ -53,7 +53,7 @@ const Index: React.FC<CampaignsProps> = ({ planId }) => {
   }
 
   const handleEditClick = (campaignId: string) => {
-    router.push(`/advisor/create-campaign?planId=${planId}&campaignId=${campaignId}&edit=true`);
+    router.push(`/create-campaign?planId=${planId}&campaignId=${campaignId}&edit=true`);
   }
 
   const handleDownload = async (campaignId: string, campaignName: string) => {
@@ -75,7 +75,7 @@ const Index: React.FC<CampaignsProps> = ({ planId }) => {
         <Search handleSearch={handleSearch} />
         <button
           className={'btn-primary bg-navyblue hover:bg-darknavyblue text-white w-full md:w-fit h-11 rounded-md px-6 font-medium'}
-          onClick={() => router.push(`/advisor/create-campaign?planId=${planId}`)}
+          onClick={() => router.push(`/create-campaign?planId=${planId}`)}
         >
           Create Campaign
         </button>
@@ -95,7 +95,7 @@ const Index: React.FC<CampaignsProps> = ({ planId }) => {
               <td style={cellStyle}>
                 <p
                   className={'underline text-navyblue cursor-pointer inline-block'}
-                  onClick={() => router.push(`/advisor/campaign-detail?planId=${planId}&campaignId=${campaign.id}`)}
+                  onClick={() => router.push(`/campaign-detail?planId=${planId}&campaignId=${campaign.id}`)}
                 >
                   {campaign.name}
                 </p>
@@ -103,13 +103,15 @@ const Index: React.FC<CampaignsProps> = ({ planId }) => {
               <td style={cellStyle}>{campaign.count}</td>
               <td style={cellStyle}>{campaign.last_update_date}</td>
               <td>
-                <div className={'w-full flex justify-center items-center gap-x-2'}>
+                <div className={'w-full flex pl-2 items-center gap-x-2'}>
                   <Image src={'/download.png'} alt={''} width={30} height={30} className={'cursor-pointer'} onClick={
                     () => handleDownload(campaign.id, campaign.name)
                   } />
-                  <Image src={'/pen.png'} alt={''} width={24} height={24} className={'cursor-pointer'} onClick={
-                    () => handleEditClick(campaign.id)
-                  } />
+                  {!campaign?.hide_delete && (
+                    <Image src={'/pen.png'} alt={''} width={24} height={24} className={'cursor-pointer'} onClick={
+                      () => handleEditClick(campaign.id)
+                    } />
+                  )}
                   {!campaign?.hide_delete && (
                     <Image
                       src={'/delete.png'}

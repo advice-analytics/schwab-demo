@@ -8,7 +8,7 @@ import BackButton from "@/components/common/BackButton";
 
 interface CreateCampaignDataType {
     name?: string;
-    msg_type?: string[];
+    msg_type: string[];
     target_advice_scores?: string[];
     target_age_groups?: string[];
     income_from?: number;
@@ -30,6 +30,7 @@ const CreateCampaign: React.FC = () => {
         plan_id: useSearchParams()?.get('planId') ?? '',
         balance_from: 0,
         income_from: 0,
+        msg_type: []
     });
     const params = useSearchParams();
     const campaignId: string = params?.get('campaignId') ?? '';
@@ -66,7 +67,7 @@ const CreateCampaign: React.FC = () => {
         };
 
         isEditForm && fetchCampaign();
-    }, [campaignId]);
+    }, [campaignId, isEditForm]);
 
     const handleCreateCampaign = async (): Promise<void> => {
         try {
@@ -75,7 +76,7 @@ const CreateCampaign: React.FC = () => {
             router.back();
         }
         catch (error: any) {
-            console.log(error);
+            throw new Error(error);
         }
         finally {
             setLoading(false);
@@ -110,6 +111,20 @@ const CreateCampaign: React.FC = () => {
         setCampaignData({ ...createCampaignData, target_advice_scores: updatedAdviceScores });
     }
 
+    const handleCampaignTypeChange = (event: { target: { value: string; }; }) => {
+        let updatedValues: string[] = createCampaignData.msg_type;
+        const value: string = event.target.value;
+
+        if (updatedValues.includes(value)) {
+            updatedValues = updatedValues.filter((updatedValue) => updatedValue != value);
+        }
+        else {
+            updatedValues.push(value);
+        }
+
+        setCampaignData({ ...createCampaignData, msg_type: updatedValues });
+    }
+
     return (
       <div className="container mx-auto p-4">
           <BackButton />
@@ -137,13 +152,11 @@ const CreateCampaign: React.FC = () => {
                   <div className="flex space-x-4">
                       <div>
                           <input
-                            type="radio"
+                            type="checkbox"
                             id="email"
                             name="campaignType"
                             value="email"
-                            onChange={(event) => {
-                                setCampaignData({ ...createCampaignData, msg_type: [event.target.value] });
-                            }}
+                            onChange={handleCampaignTypeChange}
                             className="mr-2"
                             checked={createCampaignData?.msg_type?.includes('email')}
                           />
@@ -151,13 +164,11 @@ const CreateCampaign: React.FC = () => {
                       </div>
                       <div>
                           <input
-                            type="radio"
+                            type="checkbox"
                             id="text"
                             name="campaignType"
                             value="text"
-                            onChange={(event) => {
-                                setCampaignData({ ...createCampaignData, msg_type: [event.target.value] });
-                            }}
+                            onChange={handleCampaignTypeChange}
                             className="mr-2"
                             checked={createCampaignData?.msg_type?.includes('text')}
                           />

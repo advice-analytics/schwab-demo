@@ -10,7 +10,7 @@ const BackButton = () => {
       className={'flex items-center text-navyblue underline cursor-pointer'}
       onClick={() => router.back()}
     >
-      <p>&lt;&lt; Back</p>
+      <p>&lt; Back</p>
     </div>
   );
 };

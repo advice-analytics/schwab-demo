@@ -61,7 +61,6 @@ const createAccountWithEmail = async (email: string, password: string): Promise<
     const userCredential: UserCredential = await createUserWithEmailAndPassword(auth, email, password);
     return userCredential;
   } catch (error: any) {
-    console.error('Error creating user account:', error.message);
     throw error;
   }
 };
@@ -72,7 +71,6 @@ const signInUserWithEmailAndPassword = async (email: string, password: string): 
     const userCredential: UserCredential = await signInWithEmailAndPassword(auth, email, password);
     return userCredential;
   } catch (error: any) {
-    console.error('Error signing in with email and password:', error.message);
     throw error;
   }
 };
@@ -86,9 +84,7 @@ const sendSignInEmailLink = async (email: string) => {
 
   try {
     await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-    console.log('Passwordless sign-in link sent to email:', email);
   } catch (error: any) {
-    console.error('Error sending passwordless sign-in link:', error.message);
     throw error;
   }
 };
@@ -100,7 +96,6 @@ const completeSignInWithEmailLink = async (email: string, url: string) => {
       const result = await signInWithEmailLink(auth, email, url);
       return result;
     } catch (error: any) {
-      console.error('Error completing sign-in with email link:', error.message);
       throw error;
     }
   } else {
@@ -113,9 +108,7 @@ const saveValuePropToDatabase = async (uid: string, valueProp: string): Promise<
   try {
     const valuePropRef = dbRef(database, `users/${uid}/valueProp`);
     await set(valuePropRef, { value: valueProp });
-    console.log('Value proposition saved successfully.');
   } catch (error: any) {
-    console.error('Error saving value proposition to database:', error.message);
     throw error;
   }
 };
@@ -130,7 +123,6 @@ const getValuePropFromDatabase = async (uid: string): Promise<string> => {
     // If value proposition exists, return it, otherwise return an empty string
     return valuePropData ? valuePropData.value : '';
   } catch (error: any) {
-    console.error('Error getting value proposition from database:', error.message);
     throw error;
   }
 };
@@ -145,10 +137,7 @@ const deleteCampaignFromDatabase = async (campaignId: string): Promise<void> => 
     const uid = user.uid;
     const campaignRef = dbRef(database, `users/${uid}/campaigns/${campaignId}`);
     await remove(campaignRef);
-
-    console.log(`Campaign data with ID ${campaignId} deleted successfully for uid ${uid}.`);
   } catch (error: any) {
-    console.error('Error deleting campaign data from database:', error.message);
     throw error;
   }
 };
@@ -167,10 +156,7 @@ const saveCampaignToDatabase = async (uid: string, campaign: Campaign): Promise<
     // Save campaign data under a new push ID (Firebase generates unique ID)
     const newCampaignRef = push(campaignsRef);
     await set(newCampaignRef, campaign);
-
-    console.log(`Campaign data saved successfully for uid ${uid}.`);
   } catch (error: any) {
-    console.error('Error saving campaign data to database:', error.message);
     throw error;
   }
 };
@@ -199,7 +185,6 @@ const getCampaignsForUser = async (uid: string): Promise<Campaign[]> => {
 
     return campaigns;
   } catch (error) {
-    console.error('Error retrieving campaigns from database:', error);
     throw error;
   }
 };
@@ -221,7 +206,6 @@ const uploadProfilePicture = async (uid: string, file: File): Promise<string> =>
 
     return downloadURL;
   } catch (error: any) {
-    console.error('Error uploading profile picture:', error.message);
     throw error;
   }
 };
@@ -247,7 +231,6 @@ const getProfilePictureURL = async (uid: string): Promise<string | null> => {
 
     return downloadURL;
   } catch (error: any) {
-    console.error('Error getting profile picture URL:', error.message);
     return null;
   }
 };

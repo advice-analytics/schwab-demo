@@ -16,7 +16,7 @@ const AdvisorInfo: React.FC<AdvisorInfoProps> = ({ userEmail, valuePropId, onClo
       await auth.signOut();
       window.location.href = '/';
     } catch (error: any) {
-      console.error('Error logging out:', error.message);
+      throw error;
     }
   };
 
@@ -33,16 +33,15 @@ const AdvisorInfo: React.FC<AdvisorInfoProps> = ({ userEmail, valuePropId, onClo
           // Handle upload progress if needed
         },
         (error) => {
-          console.error('Error uploading file:', error.message);
+          throw error;
         },
         async () => {
           const downloadURL = await getDownloadURL(fileRef);
-          console.log('File uploaded successfully:', downloadURL);
           // Handle success message or additional logic after upload
         }
       );
     } catch (error: any) {
-      console.error('Error uploading plan data:', error.message);
+      throw error;
     }
   };
 

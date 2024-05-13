@@ -4,9 +4,9 @@ import React, {useEffect, useState} from 'react';
 
 import { generateCampaignPrompt } from '@/utilities/promptGenAI';
 import {useAuth} from "@/components/context/authContext";
-import Image from "next/image";
 import {AxiosResponse} from "axios";
 import httpService from "@/services/http-service";
+import { BsArrowDown } from "react-icons/bs";
 
 interface MessagePropType {
   planId: string;
@@ -34,10 +34,8 @@ const Message: React.FC<MessagePropType> = ({ planId, campaignName, campaignType
       suggested_campaign_msg: genAImessage,
       id: campaignId
     };
-    console.log(data)
     try {
       const response: AxiosResponse = await httpService.post('/v1/advisor/campaign', data);
-      console.log(response)
     }
     catch (error: any) {
       throw new Error(error);
@@ -97,7 +95,7 @@ const Message: React.FC<MessagePropType> = ({ planId, campaignName, campaignType
           onClick={handleCopy}
         >
           Copy AI generated message
-          <Image src={'/arrow-down.png'} alt={''} width={24} height={24} className={'mt-0.5'} />
+          <BsArrowDown />
         </button>
       </div>
       <div>

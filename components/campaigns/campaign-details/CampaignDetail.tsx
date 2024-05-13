@@ -6,6 +6,7 @@ import {cellStyle, tableRowStyle, tableStyle} from "@/constants/table-styles";
 import FavoriteIcon from "@/components/participants-and-campaigns/FavoriteIcon";
 import Image from "next/image";
 import Search from "@/components/common/Search";
+import {useRouter} from "next/navigation";
 
 const CampaignDetail: React.FC<{ planId: string; campaignId: string; }> = ({ planId, campaignId }) => {
   const [campaignDetails, setCampaignDetails] = useState<any>();
@@ -19,6 +20,7 @@ const CampaignDetail: React.FC<{ planId: string; campaignId: string; }> = ({ pla
     page: 1
   });
   const noOfPages: number = Math.ceil((campaignDetails?.total_count ?? 0) / 10) || 0;
+  const router = useRouter();
 
   const handleSearch = async (search: string) => {
     setParams({ ...params, search, page: 1 });
@@ -55,6 +57,10 @@ const CampaignDetail: React.FC<{ planId: string; campaignId: string; }> = ({ pla
     setParams({ ...params, page: nextPage });
   }
 
+  const handleParticipantClick = async (participantId: string | number) => {
+    router.push(`/participant-detail?planId=${planId}&participantId=${participantId}`);
+  }
+
   return (
     <div className={'flex flex-col mt-3'}>
       <Search handleSearch={handleSearch} />
@@ -71,7 +77,10 @@ const CampaignDetail: React.FC<{ planId: string; campaignId: string; }> = ({ pla
         {campaignDetails?.participants?.map((participant: any, index: number) => (
           <tr key={index} style={tableRowStyle}>
             <td style={cellStyle}>
-              <p className={'underline text-navyblue cursor-pointer'}>
+              <p
+                className={'underline text-navyblue cursor-pointer'}
+                onClick={() => handleParticipantClick(participant.id)}
+              >
                 {participant.external_id}
               </p>
             </td>
@@ -95,7 +104,13 @@ const CampaignDetail: React.FC<{ planId: string; campaignId: string; }> = ({ pla
         ))}
         </tbody>
       </table>
-      <div className={'flex justify-center items-center gap-x-3 w-full mb-3 mt-3'}>
+      <div className={'flex justify-center items-center gap-x-3 w-full mb-3 mt-6'}>
+        <button
+          className={`bg-gray-500 text-white rounded-md py-1 px-4`}
+          onClick={() => params.page !== 1 && handlePageButtonClick(1)}
+        >
+          Start
+        </button>
         <button
           className={`bg-gray-500 text-white rounded-md py-1 px-4`}
           disabled={params.page === 1}
@@ -103,13 +118,19 @@ const CampaignDetail: React.FC<{ planId: string; campaignId: string; }> = ({ pla
         >
           &lt;
         </button>
-        <p>{params.page} of {noOfPages}</p>
+        <p>{noOfPages ? params.page : 0} of {noOfPages}</p>
         <button
           className={`bg-gray-500 text-white rounded-md py-1 px-4`}
           onClick={() => handlePageButtonClick(params.page + 1)}
           disabled={params.page === noOfPages}
         >
           &gt;
+        </button>
+        <button
+          className={`bg-gray-500 text-white rounded-md py-1 px-4`}
+          onClick={() => params.page !== noOfPages && handlePageButtonClick(noOfPages)}
+        >
+          End
         </button>
       </div>
     </div>

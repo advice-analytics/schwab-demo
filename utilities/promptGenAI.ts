@@ -1,5 +1,7 @@
 import { openaiApiKey } from '@/constants/env';
 
+import loaderService from "@/services/loader-service";
+
 interface PromptContent {
   [key: string]: string | string[];
 }
@@ -99,17 +101,14 @@ const generateOpenAIPrompt = async (content: PromptContent, sessionId?: string):
         ${promptContent}																										
   `;
 
-  console.log('OpenAI Prompt:', openAIPrompt);
-
   const payload = {
     model: 'gpt-3.5-turbo-0125',
     messages: [{ role: 'assistant', content: openAIPrompt }],
     ...(sessionId && { session_id: sessionId }), // Include session_id if provided
   };
 
-  console.log('OpenAI Payload:', payload);
-
   try {
+    loaderService.showLoader(true);
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -119,8 +118,6 @@ const generateOpenAIPrompt = async (content: PromptContent, sessionId?: string):
       body: JSON.stringify(payload),
     });
 
-    console.log('OpenAI API Response:', response);
-
     if (!response.ok) {
       throw new Error('OpenAI API request failed');
     }
@@ -128,12 +125,12 @@ const generateOpenAIPrompt = async (content: PromptContent, sessionId?: string):
     const responseData = await response.json();
     const generatedPrompt = responseData?.choices?.[0]?.message?.content || '';
 
-    console.log('Generated Prompt:', generatedPrompt);
-
     return generatedPrompt;
   } catch (error) {
-    console.error('Error calling OpenAI API:', error);
     throw error;
+  }
+  finally {
+    loaderService.showLoader(false);
   }
 };
 

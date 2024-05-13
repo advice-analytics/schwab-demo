@@ -2,23 +2,17 @@
 
 import React, { useState, useEffect } from 'react';
 import { Plan } from '@/types/PlanTypes';
-import { Participant } from '@/types/ParticipantTypes';
+import { BsArrowUpRightSquare } from "react-icons/bs";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 interface PlanTableProps {
   plans: Plan[];
-  onPlanSelect: (plan: Plan) => void;
-  onHealthClick: (plan: Plan) => void;
 }
 
-const PlanTable: React.FC<PlanTableProps> = ({ plans, onPlanSelect, onHealthClick }) => {
+const PlanTable: React.FC<PlanTableProps> = ({ plans }) => {
   const router = useRouter();
   const [isMobileView, setIsMobileView] = useState<boolean>(false);
-
-  const calculateParticipantsCount = (participants: Participant[] | undefined): number => {
-    return participants ? participants.length : 0;
-  };
 
   const checkScreenWidth = () => {
     setIsMobileView(window.innerWidth < 768); // Adjust breakpoint as needed
@@ -35,8 +29,7 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onPlanSelect, onHealthClic
   };
 
   const handlePlanSelect = (plan: Plan) => {
-    //onPlanSelect(plan);
-    router.push(`/advisor/participants-and-campaigns?planId=${plan.id}`);
+    router.push(`/participants-and-campaigns?planId=${plan.id}`);
   };
   
   const summary = calculateSummary(plans);
@@ -49,6 +42,10 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onPlanSelect, onHealthClic
       window.removeEventListener('resize', checkScreenWidth);
     };
   }, []);
+
+  const handleHealthClick = (plan: Plan) => {
+    router.push(`/plan-health?planId=${plan.id}`);
+  }
   
   return (
     <div
@@ -112,7 +109,7 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onPlanSelect, onHealthClic
                       textDecoration: 'underline',
                       color: '#144e74',
                     }}
-                    onClick={() => onHealthClick(plan)}
+                    onClick={() => handleHealthClick(plan)}
                   >
                     {plan.metrics?.health}
                   </span>
@@ -132,7 +129,7 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onPlanSelect, onHealthClic
                       onClick={() => handlePlanSelect(plan)}
                     >
                       Select
-                      <Image src={'/open-link.png'} alt={''} width={20} height={20}/>
+                      <BsArrowUpRightSquare />
                     </button>
                   </div>
                 </td>
