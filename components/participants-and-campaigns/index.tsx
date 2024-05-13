@@ -57,7 +57,10 @@ function Index() {
           <p>
             Plan Assets:
             <span className={'ml-2'}>
-              <b>$ {metricsData?.total_assets}</b>
+              <b>{metricsData?.total_assets?.toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+              })}</b>
             </span>
           </p>
         </div>

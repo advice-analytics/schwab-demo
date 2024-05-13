@@ -7,7 +7,7 @@ import {useSearchParams} from "next/navigation";
 import Image from "next/image";
 
 const Index = () => {
-  const [planData, setPlanData] = useState<any>({});
+  const [planData, setPlanData] = useState<any>();
   const planId: string | null = useSearchParams()?.get('planId');
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const Index = () => {
       <b>{planData?.name} Profit Sharing Plan</b>
       <div className={'flex flex-col gap-y-2'}>
         <b>Plan Health Score</b>
-        <img src={'/chart.png'} alt={''} className={'w-full md:w-[20rem]'} />
+        {planData && <img src={'/chart.png'} alt={''} className={'w-full md:w-[20rem]'} />}
       </div>
       <div className={'text-center'}>
         <button

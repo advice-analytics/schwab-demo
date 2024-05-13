@@ -1,14 +1,14 @@
 import React, {useEffect, useRef, useState} from 'react';
 
-import {useRouter, useSearchParams} from "next/navigation";
+import {useSearchParams} from "next/navigation";
 import {AxiosResponse} from "axios";
 
 import httpService from "@/services/http-service";
 import FavoriteIcon from "@/components/participants-and-campaigns/FavoriteIcon";
 import Score from "@/components/participants-and-campaigns/Score";
+import BackButton from "@/components/common/BackButton";
 
 const ParticipantDetail = () => {
-  const router = useRouter();
   const params = useSearchParams();
   const [participantData, setParticipantData] = useState<any>();
   const planId: string | null = params.get('planId');
@@ -58,20 +58,17 @@ const ParticipantDetail = () => {
 
   return (
     <div>
-      <div
-        className={'flex items-center text-navyblue underline cursor-pointer'}
-        onClick={() => router.back()}
-      >
-        <p>&lt;&lt; Back</p>
-      </div>
+      <BackButton />
       <div className={'mt-3 md:mt-5 flex flex-col gap-y-3'}>
         <div className={'flex flex-col gap-y-3'}>
           <div className={'flex justify-between items-center'}>
             <p className={'text-navyblue'}>Plan: {participantData?.plan_name}</p>
             <div>
-              <div className={'flex flex-row-reverse'}>
-                <FavoriteIcon width={30} height={30} planId={planId} participantId={participantId} />
-              </div>
+              {participantData && (
+                <div className={'flex flex-row-reverse'}>
+                  <FavoriteIcon width={30} height={30} planId={planId} participantId={participantId} filled={participantData?.is_favorite} />
+                </div>
+              )}
               <div className={'flex items-center mt-2'}>
                 <p className={'text-2xl'} style={{ color: 'green' }}>{participantData?.advice_score}</p>
                 &nbsp;&nbsp;/&nbsp;
