@@ -7,8 +7,15 @@ import FavoriteIcon from "@/components/participants-and-campaigns/FavoriteIcon";
 import Image from "next/image";
 import Search from "@/components/common/Search";
 import {useRouter} from "next/navigation";
+import download from "downloadjs";
 
-const CampaignDetail: React.FC<{ planId: string; campaignId: string; }> = ({ planId, campaignId }) => {
+interface CampaignDetailProps {
+  planId: string;
+  campaignId: string;
+  campaignName: string;
+}
+
+const CampaignDetail: React.FC<CampaignDetailProps> = ({ planId, campaignId, campaignName }) => {
   const [campaignDetails, setCampaignDetails] = useState<any>();
   const [params, setParams] = useState<{
     search: string;
@@ -58,12 +65,30 @@ const CampaignDetail: React.FC<{ planId: string; campaignId: string; }> = ({ pla
   }
 
   const handleParticipantClick = async (participantId: string | number) => {
-    router.push(`/participant-detail?planId=${planId}&participantId=${participantId}`);
+    router.push(`/participant-detail?planId=${planId}&participantId=${participantId}&campaignId=${campaignId}`);
+  }
+
+  const handleDownload = async (campaignId: string, campaignName: string) => {
+    try {
+      const response: AxiosResponse = await httpService.get(`/v1/advisor/campaign/${campaignId}/download`, {
+        responseType: 'blob'
+      });
+      const contentType: string = response.headers['content-type'];
+      download(response.data, `${campaignName}.csv`, contentType);
+    }
+    catch (error: any) {
+      throw new Error(error);
+    }
   }
 
   return (
     <div className={'flex flex-col mt-3'}>
-      <Search handleSearch={handleSearch} />
+      <div className={'flex justify-between items-center'}>
+        <Search handleSearch={handleSearch} />
+        <Image src={'/download.png'} alt={''} width={30} height={30} className={'cursor-pointer'} onClick={
+          () => handleDownload(campaignId, campaignName)
+        } />
+      </div>
       <table style={tableStyle} className={'mt-5'}>
         <thead>
         <tr style={{backgroundColor: '#144e74', color: 'white', textAlign: 'center'}}>

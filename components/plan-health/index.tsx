@@ -4,7 +4,6 @@ import BackButton from "@/components/common/BackButton";
 import {AxiosResponse} from "axios";
 import httpService from "@/services/http-service";
 import {useSearchParams} from "next/navigation";
-import Image from "next/image";
 
 const Index = () => {
   const [planData, setPlanData] = useState<any>();
@@ -26,7 +25,7 @@ const Index = () => {
 
   return (
     <div className={'flex flex-col gap-y-3 md:gap-y-5'}>
-      <BackButton />
+      <BackButton url={'/'} />
       <p>
         Plan:
         <b className={'ml-3'}>{planData?.name}</b>

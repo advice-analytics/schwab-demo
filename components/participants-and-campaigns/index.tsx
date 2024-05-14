@@ -14,12 +14,12 @@ function Index() {
 
   const tabs: Tab[] = [
     {
-      title: 'Participants',
-      content: <Participants planId={planId ?? ''} />
-    },
-    {
       title: 'Campaigns',
       content: <Campaigns planId={planId ?? ''} />
+    },
+    {
+      title: 'Participants',
+      content: <Participants planId={planId ?? ''} />
     }
   ];
 
@@ -39,33 +39,33 @@ function Index() {
 
   return (
     <div className={'flex flex-col gap-y-5'}>
-      <BackButton />
+      <BackButton url={'/'} />
       <div className={'flex flex-col gap-y-3'}>
         <div className={'flex flex-row flex-wrap gap-x-10'}>
           <p>
             Plan:
             <span className={'ml-2'}>
-              <b>{metricsData?.name}</b>
-            </span>
-          </p>
-          <p>
-            Participants:
-            <span className={'ml-2'}>
-              <b>{metricsData?.participant_count}</b>
+              <b className={'text-lg'}>{metricsData?.name}</b>
             </span>
           </p>
           <p>
             Plan Assets:
             <span className={'ml-2'}>
-              <b>{metricsData?.total_assets?.toLocaleString("en-US", {
+              <b style={{ color: 'green' }} className={'text-lg'}>{metricsData?.total_assets?.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
               })}</b>
             </span>
           </p>
+          <p>
+            Participants:
+            <span className={'ml-2'}>
+              <b className={'text-navyblue text-lg'}>{metricsData?.participant_count?.toLocaleString()}</b>
+            </span>
+          </p>
         </div>
         <div>
-          <b>Number of participants with strong interest in:</b>
+          <b>Number of participants who need advice with:</b>
           <div className={'flex flex-col md:flex-row md:gap-x-16 mt-3'}>
             <div>
               <Score label={'Retirement'} value={metricsData?.metrics?.retirement_count} scoreRight/>
@@ -75,7 +75,6 @@ function Index() {
             <div>
               <Score label={'Financial Planning'} value={metricsData?.metrics?.finances_count} scoreRight/>
               <Score label={'Estate Planning'} value={metricsData?.metrics?.estate_count} scoreRight/>
-              <Score label={'Advisor Score'} value={metricsData?.metrics?.health} scoreRight/>
             </div>
           </div>
         </div>

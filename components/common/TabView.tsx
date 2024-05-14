@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
 export interface Tab {
   title: string;
   content: React.ReactNode;
+  active?: boolean;
 }
 
 interface TabView {
@@ -12,11 +13,25 @@ interface TabView {
 }
 
 const TabView: React.FC<TabView> = ({ tabs }) => {
-  const [selectedTab, setSelectedTab] = useState<number>(0);
+  const [selectedTab, setSelectedTab] = useState<number | undefined>();
 
   const handleTabClick = (tabIndex: number) => {
     setSelectedTab(tabIndex);
   }
+
+  useEffect(() => {
+    if (selectedTab === undefined) {
+      let activeTab: number = 0;
+
+      tabs?.forEach((tab: Tab, index: number) => {
+        if (tab.active) {
+          activeTab = index;
+        }
+      });
+
+      setSelectedTab(activeTab);
+    }
+  }, [tabs]);
 
   return (
     <div>
@@ -32,7 +47,7 @@ const TabView: React.FC<TabView> = ({ tabs }) => {
         ))}
       </div>
       <div className={'py-3'}>
-        {tabs?.[selectedTab].content}
+        {selectedTab !== undefined && tabs?.[selectedTab]?.content}
       </div>
     </div>
   );

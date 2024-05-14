@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from 'react';
 
-import download from 'downloadjs';
-
 import httpService from "@/services/http-service";
 import { cellStyle, tableRowStyle, tableStyle } from "@/constants/table-styles";
 import Search from "@/components/common/Search";
-import Image from "next/image";
 import {AxiosResponse} from "axios";
 import {useRouter} from "next/navigation";
+import { BsFillTrashFill } from "react-icons/bs";
 
 interface CampaignsProps {
   planId: string | number;
@@ -52,23 +50,6 @@ const Index: React.FC<CampaignsProps> = ({ planId }) => {
     }
   }
 
-  const handleEditClick = (campaignId: string) => {
-    router.push(`/create-campaign?planId=${planId}&campaignId=${campaignId}&edit=true`);
-  }
-
-  const handleDownload = async (campaignId: string, campaignName: string) => {
-    try {
-      const response: AxiosResponse = await httpService.get(`/v1/advisor/campaign/${campaignId}/download`, {
-        responseType: 'blob'
-      });
-      const contentType: string = response.headers['content-type'];
-      download(response.data, `${campaignName}.csv`, contentType);
-    }
-    catch (error: any) {
-      throw new Error(error);
-    }
-  }
-
   return (
     <div className={'flex flex-col gap-y-5 mt-3'}>
       <div className={'flex flex-col md:flex-row gap-y-3 justify-between'}>
@@ -83,10 +64,10 @@ const Index: React.FC<CampaignsProps> = ({ planId }) => {
       <table style={tableStyle}>
         <thead>
         <tr style={{ backgroundColor: '#144e74', color: 'white', textAlign: 'center' }}>
-          <th style={{ padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap' }}>Name</th>
-          <th style={{ padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap' }}>#On List</th>
-          <th style={{ padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap' }}>Last Update</th>
-          <th>Actions</th>
+          <th style={{ padding: '10px', border: '1px solid #ccc', whiteSpace: 'pre-wrap' }}>Name</th>
+          <th style={{ padding: '10px', border: '1px solid #ccc', whiteSpace: 'pre-wrap' }}>Number of Participants</th>
+          <th style={{ padding: '10px', border: '1px solid #ccc', whiteSpace: 'pre-wrap' }}>Last Update</th>
+          <th></th>
         </tr>
         </thead>
         <tbody>
@@ -103,23 +84,13 @@ const Index: React.FC<CampaignsProps> = ({ planId }) => {
               <td style={cellStyle}>{campaign.count}</td>
               <td style={cellStyle}>{campaign.last_update_date}</td>
               <td>
-                <div className={'w-full pl-2 flex flex-col gap-y-1 md:flex-row items-center md:gap-x-2'}>
-                  <Image src={'/download.png'} alt={''} width={30} height={30} className={'cursor-pointer'} onClick={
-                    () => handleDownload(campaign.id, campaign.name)
-                  } />
+                <div className={'w-full pl-4 pr-4 md:pr-0 flex flex-col gap-y-1 md:flex-row items-center md:gap-x-2'}>
                   {!campaign?.hide_delete && (
-                    <Image src={'/pen.png'} alt={''} width={24} height={24} className={'cursor-pointer'} onClick={
-                      () => handleEditClick(campaign.id)
-                    } />
-                  )}
-                  {!campaign?.hide_delete && (
-                    <Image
-                      src={'/delete.png'}
-                      alt={''}
-                      width={24}
-                      height={24}
+                    <BsFillTrashFill
                       className={'cursor-pointer'}
+                      fontSize={20}
                       onClick={() => handleDeleteClick(campaign.id)}
+                      title={'Delete'}
                     />
                   )}
                 </div>

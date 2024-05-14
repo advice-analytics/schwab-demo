@@ -6,7 +6,8 @@ import { generateCampaignPrompt } from '@/utilities/promptGenAI';
 import {useAuth} from "@/components/context/authContext";
 import {AxiosResponse} from "axios";
 import httpService from "@/services/http-service";
-import { BsArrowDown } from "react-icons/bs";
+import { BsArrowDown, BsArrowCounterclockwise } from "react-icons/bs";
+import {useSearchParams} from "next/navigation";
 
 interface MessagePropType {
   planId: string;
@@ -23,6 +24,8 @@ const Message: React.FC<MessagePropType> = ({ planId, campaignName, campaignType
   const [userData, loadingAuth] = useAuth();
   const [userMessage, setUserMessage] = useState<string>(campaignMsg);
   const [genAImessage, setGenAImessage] = useState<string>(suggestedMsg);
+  const params = useSearchParams();
+  const regenerateAIMsg: boolean = (params?.get('regenerate') === 'true') ?? false;
 
   const handleSaveClick = async () => {
     const data: {
@@ -53,11 +56,15 @@ const Message: React.FC<MessagePropType> = ({ planId, campaignName, campaignType
       userData?.uid || ''
     );
     setGenAImessage(message);
+    !userMessage && setUserMessage(message);
+    handleSaveClick();
   };
 
   useEffect(() => {
-    !suggestedMsg && generateAImessage();
-  }, []);
+    if (regenerateAIMsg) {
+      generateAImessage();
+    }
+  }, [regenerateAIMsg]);
 
   const handleRegenerateClick = async () => {
     generateAImessage();
@@ -69,21 +76,26 @@ const Message: React.FC<MessagePropType> = ({ planId, campaignName, campaignType
 
   return (
     <div className={'flex flex-col gap-y-5'}>
-      <b>Please review carefully for mistakes. You can edit below.</b>
+      <b>Please review carefully for mistakes.</b>
       <div>
         <div className={'flex justify-between'}>
           <b>Suggested campaign messaging</b>
           {genAImessage && (
-            <p
-              className={'underline text-navyblue cursor-pointer'}
+            <div
+              className={'inline-flex items-center cursor-pointer'}
               onClick={handleRegenerateClick}
             >
-              Regenerate
-            </p>
+              <p
+                className={'text-navyblue mr-0.5 underline'}
+              >
+                Regenerate
+              </p>
+              <BsArrowCounterclockwise fontSize={16} style={{ color: '#144E74' }} className={'mt-0.5'} />
+            </div>
           )}
         </div>
         <textarea
-          className="rounded h-28 w-full p-3 mt-3 outline-none resize-none"
+          className="rounded h-[20rem] w-full p-3 mt-3 outline-none resize-none"
           style={{border: '1px solid lightgrey'}}
           placeholder={'Enter...'}
           value={genAImessage}
@@ -101,7 +113,7 @@ const Message: React.FC<MessagePropType> = ({ planId, campaignName, campaignType
       <div>
         <b>You can edit & save here</b>
         <textarea
-          className="rounded h-28 w-full p-3 mt-3 outline-none resize-none"
+          className="rounded h-[20rem] w-full p-3 mt-3 outline-none resize-none"
           style={{border: '1px solid lightgrey'}}
           placeholder={'Enter...'}
           value={userMessage}
