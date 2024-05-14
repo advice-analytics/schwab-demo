@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
 import { useSearchParams } from "next/navigation";
 import { AxiosResponse } from "axios";
@@ -13,14 +13,16 @@ const ParticipantDetail = () => {
   const [participantData, setParticipantData] = useState<any>();
   const planId: string | null = params.get('planId');
   const participantId: string | null = params.get('participantId');
+  const campaignId: string | null = params.get('campaignId');
   const [campaigns, setCampaigns] = useState<{ [id: string]: boolean; }>({});
-  const notesRef = useRef<HTMLTextAreaElement | null>(null);
+  const [notes, setNotes] = useState<string>('');
 
   useEffect(() => {
     const fetchParticipantDetails = async () => {
       try {
         const response: AxiosResponse = await httpService.get(`/v1/advisor/plan/${planId}/participant/${participantId}`);
         setParticipantData(response.data);
+        setNotes(response.data.notes);
       }
       catch (error: any) {
         throw new Error(error);
@@ -43,7 +45,7 @@ const ParticipantDetail = () => {
     } = {
       exclude_from: [],
       include_in: [],
-      notes: ''
+      notes
     };
 
     Object.keys(campaigns).forEach((campaign) => {
@@ -62,7 +64,9 @@ const ParticipantDetail = () => {
 
   return (
     <div>
-      <BackButton />
+      <BackButton
+        url={campaignId ? `/campaign-detail?planId=${planId}&campaignId=${campaignId}` : `/participants-and-campaigns?planId=${planId}`}
+      />
       <div className={'mt-3 md:mt-5 flex flex-col gap-y-3'}>
         <div className={'flex flex-col gap-y-3'}>
           <div className={'flex justify-between items-center'}>
@@ -140,9 +144,8 @@ const ParticipantDetail = () => {
             className={'rounded w-full h-40 outline-none py-3 px-3.5 resize-none'}
             style={{ border: '1px solid lightgrey' }}
             placeholder={'Enter here...'}
-            ref={notesRef}
-            value={participantData?.notes}
-            onChange={e => setParticipantData({ ...participantData, notes: e.target.value })}
+            value={notes}
+            onChange={(event) => setNotes(event.target.value)}
           />
         </div>
         <div className={'text-center mt-3'}>

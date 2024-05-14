@@ -2,15 +2,23 @@ import React from 'react';
 
 import { useRouter } from "next/navigation";
 
-const BackButton = () => {
+interface BackButtonProps {
+  url?: string;
+}
+
+const BackButton: React.FC<BackButtonProps> = ({ url }) => {
   const router = useRouter();
+
+  const handleBackButtonClick = () => {
+    url ? router.push(url) : router.back();
+  }
 
   return (
     <div
       className={'flex items-center text-navyblue underline cursor-pointer'}
-      onClick={() => router.back()}
+      onClick={handleBackButtonClick}
     >
-      <p>&lt; Back</p>
+      <b>&lt; Back</b>
     </div>
   );
 };
