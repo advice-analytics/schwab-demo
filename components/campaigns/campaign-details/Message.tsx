@@ -1,13 +1,13 @@
 'use client';
 
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { generateCampaignPrompt } from '@/utilities/promptGenAI';
-import {useAuth} from "@/components/context/authContext";
-import {AxiosResponse} from "axios";
+import { useAuth } from "@/components/context/authContext";
+import { AxiosResponse } from "axios";
 import httpService from "@/services/http-service";
 import { BsArrowDown, BsArrowCounterclockwise } from "react-icons/bs";
-import {useSearchParams} from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 interface MessagePropType {
   planId: string;
@@ -27,14 +27,14 @@ const Message: React.FC<MessagePropType> = ({ planId, campaignName, campaignType
   const params = useSearchParams();
   const regenerateAIMsg: boolean = (params?.get('regenerate') === 'true') ?? false;
 
-  const handleSaveClick = async () => {
+  const handleSaveClick = async (campaignMsgVar: string, suggestedCampaignMsgVar: string) => {
     const data: {
       campaign_msg: string;
       suggested_campaign_msg: string;
       id: string;
     } = {
-      campaign_msg: userMessage,
-      suggested_campaign_msg: genAImessage,
+      campaign_msg: campaignMsgVar,
+      suggested_campaign_msg: suggestedCampaignMsgVar,
       id: campaignId
     };
     try {
@@ -57,7 +57,7 @@ const Message: React.FC<MessagePropType> = ({ planId, campaignName, campaignType
     );
     setGenAImessage(message);
     !userMessage && setUserMessage(message);
-    handleSaveClick();
+    handleSaveClick(message, message);
   };
 
   useEffect(() => {
@@ -87,23 +87,21 @@ const Message: React.FC<MessagePropType> = ({ planId, campaignName, campaignType
       <div>
         <div className={'flex justify-between'}>
           <b>Suggested campaign messaging</b>
-          {genAImessage && (
-            <div
-              className={'inline-flex items-center cursor-pointer'}
-              onClick={handleRegenerateClick}
+          <div
+            className={'inline-flex items-center cursor-pointer'}
+            onClick={handleRegenerateClick}
+          >
+            <p
+              className={'text-navyblue mr-0.5 underline'}
             >
-              <p
-                className={'text-navyblue mr-0.5 underline'}
-              >
-                Regenerate
-              </p>
-              <BsArrowCounterclockwise fontSize={16} style={{ color: '#144E74' }} className={'mt-0.5'} />
-            </div>
-          )}
+              Regenerate
+            </p>
+            <BsArrowCounterclockwise fontSize={16} style={{ color: '#144E74' }} className={'mt-0.5'} />
+          </div>
         </div>
         <textarea
           className="rounded h-[20rem] w-full p-3 mt-3 outline-none resize-none"
-          style={{border: '1px solid lightgrey'}}
+          style={{ border: '1px solid lightgrey' }}
           placeholder={'Enter...'}
           value={genAImessage}
         />
@@ -121,7 +119,7 @@ const Message: React.FC<MessagePropType> = ({ planId, campaignName, campaignType
         <b>You can edit & save here</b>
         <textarea
           className="rounded h-[20rem] w-full p-3 mt-3 outline-none resize-none"
-          style={{border: '1px solid lightgrey'}}
+          style={{ border: '1px solid lightgrey' }}
           placeholder={'Enter...'}
           value={userMessage}
           onChange={(event) => {
@@ -132,7 +130,7 @@ const Message: React.FC<MessagePropType> = ({ planId, campaignName, campaignType
       <div className={'text-center'}>
         <button
           className="btn-primary bg-navyblue hover:bg-darknavyblue text-white rounded-md py-2 px-5 font-medium"
-          onClick={handleSaveClick}
+          onClick={() => handleSaveClick(userMessage, genAImessage)}
         >
           Save Changes
         </button>
