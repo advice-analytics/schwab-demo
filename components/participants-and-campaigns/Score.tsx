@@ -10,13 +10,13 @@ interface ScoreProps {
 const Score: React.FC<ScoreProps> = ({ label, value, style, scoreRight }) => (
   <>
     {scoreRight ? (
-      <div className={`flex`}>
-        <p className={'mr-5 w-[8rem]'}>{label}</p>
-        <b style={style}>{value?.toLocaleString()}</b>
+      <div className={`flex items-center`}>
+        <p className={'mr-5 w-[7.5rem]'}>{label}</p>
+        <b style={style} className={'text-lg'}>{value?.toLocaleString()}</b>
       </div>
     ) : (
-      <div className={`flex`}>
-        <b style={style} className={'mr-5 w-[4rem]'}>{value?.toLocaleString()}</b>
+      <div className={`flex items-center`}>
+        <b style={style} className={'mr-5 w-[4rem] text-lg'}>{value?.toLocaleString()}</b>
         <p>{label}</p>
       </div>
     )}

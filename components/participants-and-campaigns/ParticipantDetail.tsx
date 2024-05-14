@@ -17,6 +17,14 @@ const ParticipantDetail = () => {
   const [campaigns, setCampaigns] = useState<{ [id: string]: boolean; }>({});
   const [notes, setNotes] = useState<string>('');
 
+  const scores: { label: string; value: string }[] = [
+    { label: 'Retirement', value: 'Retirement' },
+    { label: 'Financial Planning', value: 'Financial Planning' },
+    { label: 'Investment', value: 'Investment' },
+    { label: 'Estate Planning', value: 'Estate Planning' },
+    { label: 'Tax Planning', value: 'Tax Planning' }
+  ]
+
   useEffect(() => {
     const fetchParticipantDetails = async () => {
       try {
@@ -69,35 +77,60 @@ const ParticipantDetail = () => {
       />
       <div className={'mt-3 md:mt-5 flex flex-col gap-y-3'}>
         <div className={'flex flex-col gap-y-3'}>
-          <div className={'flex justify-between items-center'}>
-            <p className={'text-navyblue'}>Plan: {participantData?.plan_name}</p>
-            <p className={'text-navyblue'}>IdPerson: {participantData?.external_id}</p>
-            <div>
+          <div className={'flex flex-col gap-y-3 md:gap-y-0 md:flex-row md:justify-between md:items-center'}>
+            <p className={'text-navyblue text-base md:text-lg'}>Plan: {participantData?.plan_name}</p>
+            <p className={'text-navyblue text-base md:text-lg'}>IdPerson: {participantData?.external_id}</p>
+            <div className={'hidden md:block'}>
               {participantData && (
                 <div className={'flex flex-row-reverse'}>
-                  <FavoriteIcon width={30} height={30} planId={planId} participantId={participantId} filled={participantData?.is_favorite} />
+                  <FavoriteIcon width={30} height={30} planId={planId} participantId={participantId}
+                                filled={participantData?.is_favorite}/>
                 </div>
               )}
               <div className={'flex items-center mt-2'}>
-                <p className={'text-2xl'} style={{ color: 'green' }}>{participantData?.advice_score}</p>
+                <p className={'text-3xl md:text-4xl'} style={{color: 'green'}}>{participantData?.advice_score}</p>
                 &nbsp;&nbsp;/&nbsp;
                 <p>100</p>
               </div>
             </div>
+            <div className={'md:hidden'}>
+              <div className={'flex items-center'}>
+                <p className={'text-base'}>Advice Score</p>
+                <p className={'text-3xl md:text-4xl ml-3'} style={{color: 'green'}}>{participantData?.advice_score}</p>
+                &nbsp;&nbsp;/&nbsp;
+                <p>100</p>
+              </div>
+              {participantData && (
+                <div className={'flex items-center'}>
+                  <p className={'mr-2 text-base'}>Alerts</p>
+                  <FavoriteIcon width={30} height={30} planId={planId} participantId={participantId} filled={participantData?.is_favorite} />
+                </div>
+              )}
+            </div>
           </div>
           <div className={'flex flex-col gap-y-3'}>
-            <b>Advice Score Details</b>
+            <b>This person’s need for advice (/100):</b>
             <div className={'flex flex-col md:flex-row md:gap-x-14'}>
               <div>
-                <Score label={'Retirement'} value={participantData?.retirement_score} scoreRight />
-                <Score label={'Investment'} value={participantData?.investing_score} scoreRight />
-                <Score label={'Tax Planning'} value={participantData?.taxes_score} scoreRight />
+                <Score label={'Retirement'} value={participantData?.retirement_score} scoreRight/>
+                <Score label={'Investment'} value={participantData?.investing_score} scoreRight/>
+                <Score label={'Tax Planning'} value={participantData?.taxes_score} scoreRight/>
               </div>
               <div>
-                <Score label={'Financial Planning'} value={participantData?.finances_score} scoreRight />
-                <Score label={'Estate Planning'} value={participantData?.estate_score} scoreRight />
-                <Score label={'Advisor Score'} value={participantData?.advice_score} scoreRight />
+                <Score label={'Financial Planning'} value={participantData?.finances_score} scoreRight/>
+                <Score label={'Estate Planning'} value={participantData?.estate_score} scoreRight/>
               </div>
+            </div>
+          </div>
+          <div className={'flex flex-col gap-y-3 pointer-events-none opacity-30'}>
+            <b>Send me alerts as the scores increases for:</b>
+            <div className={'flex flex-col md:flex-row md:flex-wrap gap-x-6'}>
+              {scores.map((score, index: number) => (
+                <div key={index} className={'inline-flex items-center'}>
+                  <input type={'checkbox'} value={score.value} id={score.value} className={'mr-2'} />
+                  <label htmlFor={score.value}>{score.label}</label>
+                </div>
+              ))}
             </div>
           </div>
           {(participantData?.campaigns_in?.length || participantData?.campaigns_out?.length) ? (
@@ -142,7 +175,7 @@ const ParticipantDetail = () => {
           <b>Notes:</b>
           <textarea
             className={'rounded w-full h-40 outline-none py-3 px-3.5 resize-none'}
-            style={{ border: '1px solid lightgrey' }}
+            style={{border: '1px solid lightgrey'}}
             placeholder={'Enter here...'}
             value={notes}
             onChange={(event) => setNotes(event.target.value)}
