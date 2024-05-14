@@ -66,6 +66,13 @@ const Message: React.FC<MessagePropType> = ({ planId, campaignName, campaignType
     }
   }, [regenerateAIMsg]);
 
+  useEffect(() => {
+    if (!regenerateAIMsg) {
+      setUserMessage(campaignMsg);
+      setGenAImessage(suggestedMsg);
+    }
+  }, [campaignMsg, regenerateAIMsg, suggestedMsg]);
+
   const handleRegenerateClick = async () => {
     generateAImessage();
   }
