@@ -10,7 +10,7 @@ const HeaderNavLink: React.FC<HeaderNavLinkProps> = ({ href, children }) => {
     <Link
       href={href}
       className={
-        'inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-white-500 hover:border-gray-400 hover:text-white-700' +
+        'inline-flex items-center border-b-2 border-transparent text-sm font-medium text-white-500 hover:border-gray-400 hover:text-white-700' +
         (active ? ' border-white-500 text-white-900' : '')
       }
     >

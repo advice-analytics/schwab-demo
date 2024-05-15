@@ -35,7 +35,7 @@ const TabView: React.FC<TabView> = ({ tabs }) => {
 
   return (
     <div>
-      <div className={'flex border-b-[1.5px]'}>
+      <div className={'flex border-b-[2px]'}>
         {tabs?.map((tab: Tab, index: number) => (
           <div
             key={index}

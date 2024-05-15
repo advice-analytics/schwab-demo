@@ -215,23 +215,23 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem }) => {
 
   return (
     <div className="main-container">
-      <div className="nav-container max-h-[calc(100vh-3rem)] overflow-y-auto">
-        <AdvisorBanner />
-        {navigationItems.map((item) => (
-          <div
-            key={item.id}
-            onClick={() => handleNavigationItemClick(item)}
-            className={`nav-item`}
-            style={{
-              color: item.disabled ? 'gray' : 'navyblue',
-              cursor: item.disabled ? 'not-allowed' : 'pointer',
-              fontWeight: `${item.label === activeItem ? 'bold' : 'normal'}`
-            }}
-          >
-            {item.label}
-          </div>
-        ))}
-      </div>
+      {/*<div className="nav-container max-h-[calc(100vh-3rem)] overflow-y-auto">*/}
+      {/*  <AdvisorBanner />*/}
+      {/*  {navigationItems.map((item) => (*/}
+      {/*    <div*/}
+      {/*      key={item.id}*/}
+      {/*      onClick={() => handleNavigationItemClick(item)}*/}
+      {/*      className={`nav-item`}*/}
+      {/*      style={{*/}
+      {/*        color: item.disabled ? 'gray' : 'navyblue',*/}
+      {/*        cursor: item.disabled ? 'not-allowed' : 'pointer',*/}
+      {/*        fontWeight: `${item.label === activeItem ? 'bold' : 'normal'}`*/}
+      {/*      }}*/}
+      {/*    >*/}
+      {/*      {item.label}*/}
+      {/*    </div>*/}
+      {/*  ))}*/}
+      {/*</div>*/}
       <div className="content-container">
         {renderContent()}
         {/*{selectedPlan && (*/}

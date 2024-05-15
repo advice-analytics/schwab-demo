@@ -151,7 +151,7 @@ const CreateCampaign: React.FC = () => {
     }
 
     return (
-      <div className="container mx-auto p-4">
+      <div className="container mx-auto p-4 w-full lg:w-[75%]">
           <BackButton url={`/participants-and-campaigns?planId=${planId}`} />
           <h2 className="text-3xl mt-5 font-semibold mb-8 text-navyblue">
               {isEditForm ? 'Edit Campaign' : 'New Campaign'}

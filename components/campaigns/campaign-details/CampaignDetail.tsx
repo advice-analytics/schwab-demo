@@ -8,6 +8,7 @@ import Image from "next/image";
 import Search from "@/components/common/Search";
 import {useRouter} from "next/navigation";
 import download from "downloadjs";
+import { BsFillTrashFill } from "react-icons/bs";
 
 interface CampaignDetailProps {
   planId: string;
@@ -112,15 +113,12 @@ const CampaignDetail: React.FC<CampaignDetailProps> = ({ planId, campaignId, cam
             <td style={cellStyle}>{participant.advice_score}</td>
             <td style={cellStyle}>{participant.top_interest}</td>
             <td style={cellStyle}>
-              <div className={'flex justify-center gap-x-2'}>
+              <div className={'flex justify-center items-center gap-x-2'}>
                 <FavoriteIcon width={24} height={24} planId={planId} participantId={participant.id}
                               filled={participant.is_favorite}/>
-                <Image
-                  src={'/delete.png'}
-                  alt={''}
-                  width={24}
-                  height={24}
+                <BsFillTrashFill
                   className={'cursor-pointer'}
+                  fontSize={23}
                   onClick={() => handleDeleteClick(participant.id)}
                 />
               </div>

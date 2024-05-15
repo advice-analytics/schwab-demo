@@ -57,14 +57,19 @@ const Message: React.FC<MessagePropType> = ({ planId, campaignName, campaignType
     );
     setGenAImessage(message);
     !userMessage && setUserMessage(message);
-    handleSaveClick(message, message);
+    return message;
   };
 
   useEffect(() => {
-    if (regenerateAIMsg) {
-      generateAImessage();
-    }
-  }, [regenerateAIMsg]);
+    const fetchGenAIMsg = async () => {
+      if (regenerateAIMsg) {
+        const message: string = await generateAImessage();
+        handleSaveClick(message, message);
+      }
+    };
+
+    fetchGenAIMsg();
+  }, []);
 
   useEffect(() => {
     if (!regenerateAIMsg) {

@@ -7,6 +7,7 @@ import Campaigns from "@/components/campaigns";
 import Score from "@/components/participants-and-campaigns/Score";
 import httpService from "@/services/http-service";
 import BackButton from "@/components/common/BackButton";
+import {getNumberInUSFormat} from "@/utilities/utils";
 
 function Index() {
   const planId: string | null = useSearchParams()?.get('planId');
@@ -51,10 +52,7 @@ function Index() {
           <p>
             Plan Assets:
             <span className={'ml-2'}>
-              <b style={{ color: 'green' }} className={'text-lg'}>{metricsData?.total_assets?.toLocaleString("en-US", {
-                style: "currency",
-                currency: "USD",
-              })}</b>
+              <b style={{ color: 'green' }} className={'text-lg'}>{getNumberInUSFormat(metricsData?.metrics?.total_assets)}</b>
             </span>
           </p>
           <p>
