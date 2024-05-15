@@ -7,7 +7,6 @@ import Link from 'next/link';
 import LogoImage from '@/public/commsai.png';
 
 import HeaderNavLink from './HeaderNavLink';
-import Image from "next/image";
 import { BsXLg } from "react-icons/bs";
 import {useRouter} from "next/navigation";
 
@@ -21,36 +20,36 @@ const NavMenu: React.FC<NavMenuProps> = ({ }) => {
     setSupportPopUp(true);
   }
 
-  const menuItems: { label: string; url?: string; disabled?: boolean; onClick?: () => void }[] = [
-    { label: `Plans`, url: `/`, onClick: () => router.push('/') },
+  const menuItems: { label: string; disabled?: boolean; onClick?: () => void }[] = [
+    { label: `Plans`, onClick: () => router.push('/home') },
     { label: 'Profile', disabled: true },
     { label: 'Support', onClick: handleSupportItemClick }
   ];
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (window.scrollY > 10) {
+  //       setIsScrolled(true);
+  //     } else {
+  //       setIsScrolled(false);
+  //     }
+  //   };
+  //
+  //   window.addEventListener('scroll', handleScroll);
+  //
+  //   return () => {
+  //     window.removeEventListener('scroll', handleScroll);
+  //   };
+  // }, []);
 
   return (
-    <Disclosure as='nav' className={`bg-black shadow ${isScrolled ? 'sticky-header' : ''} h-[4rem]`}>
+    <Disclosure as='nav' className={`bg-black shadow h-[4rem]`}>
       {({ open }) => (
         <>
           <div className='mx-auto max-w-8xl px-2 sm:px-4 lg:px-8'>
             <div className='flex h-16 justify-between'>
               <div className='flex px-2 lg:px-0 items-center'>
-                <Link href="/">
+                <Link href="/home">
                   <NextImage
                     className='h-9 md:h-10 w-auto'
                     src={LogoImage}
@@ -66,34 +65,16 @@ const NavMenu: React.FC<NavMenuProps> = ({ }) => {
               {/*<div className='flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end'></div>*/}
               <div className='flex px-2 lg:px-0'>
                 <div className='hidden lg:ml-6 lg:flex lg:space-x-8'>
-                  {menuItems.map((item) => (
-                    <>
-                      {
-                        item.url ? (
-                          <HeaderNavLink href={item.url} key={item.url}>
-                            {item.label === 'Launch App' ? (
-                              <button className='text-black bg-white px-3 py-2 rounded-full'>
-                                {item.label}
-                              </button>
-                            ) : (
-                              <button className='text-navyblue hover:navyblue'>
-                                {item.label}
-                              </button>
-                            )}
-                          </HeaderNavLink>
-                        ) : (
-                          <div className={`flex items-center ${item.disabled ? 'opacity-30 pointer-events-none' : ''}`}>
-                            <p className={'text-navyblue cursor-pointer'} onClick={item.onClick}>
-                              {item.label}
-                            </p>
-                          </div>
-                        )
-                      }
-                    </>
+                  {menuItems.map((item, index: number) => (
+                    <div key={index} className={`flex items-center ${item.disabled ? 'opacity-30 pointer-events-none' : ''}`}>
+                      <p className={'text-navyblue text-sm cursor-pointer'} onClick={item.onClick}>
+                        {item.label}
+                      </p>
+                    </div>
                   ))}
                 </div>
                 <div className={'flex items-center md:hidden'}>
-                  <BsJustify fontSize={30} onClick={() => setMobileMenu(true)} />
+                  <BsJustify fontSize={30} onClick={() => setMobileMenu(true)}/>
                 </div>
               </div>
               {/*<div className='flex items-center lg:hidden'>*/}
@@ -154,7 +135,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ }) => {
                     className={`flex items-center ${item.disabled ? 'opacity-30 pointer-events-none' : ''}`}
                   >
                     <p
-                      className={'text-navyblue cursor-pointer'}
+                      className={'text-navyblue text-sm cursor-pointer'}
                       onClick={() => {
                         setMobileMenu(false);
                         item.onClick?.();

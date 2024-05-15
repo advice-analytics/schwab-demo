@@ -13,17 +13,13 @@ class InterceptorService {
 
     get defaultHeaders() {
         const headers: { [key: string]: string } = { 'Content-Type': 'application/json' };
-        let accessToken: string | null = getQueryParam('accessToken');
+        let accessToken: string | null = localStorage.getItem('accessToken');
 
         if (!accessToken) {
-            accessToken = localStorage.getItem('accessToken') ?? '';
-            if (!accessToken) {
-                window.location.href = '/';
-                return;
-            }
+            window.location.href = '/';
+            return;
         }
 
-        localStorage.setItem('accessToken', accessToken);
         headers['Authorization'] = `Bearer ${accessToken}`;
 
         return headers;
@@ -38,8 +34,11 @@ class InterceptorService {
         this.instance.interceptors.response.use(
             (response: any) => response,
             (error: any) => {
+                console.log(error)
                 if (error?.response?.status === 401) {
-                    window.location.href = '/';
+                    //window.location.href = '/';
+                    //localStorage.removeItem('accessToken');
+                    //return;
                 }
                 return Promise.reject(error);
             }

@@ -10,22 +10,24 @@ export const metadata = {
   description: 'CommsAI Advisor',
 }
 
-export default function RootLayout({
-  children,
-}: {
+export default function RootLayout({ children }: {
   children: React.ReactNode
 }) {
   return (
     <html lang="en">
       <body>
         <Loader />
-        <div className='flex flex-col min-h-screen'>
-          <div className='flex-grow'>
-            <Header />
-            <main className='flex flex-col max-w-7xl px-2 sm:px-4 lg:px-8 mx-auto my-0 py-4'>{children}</main>
-          </div>
-          <Footer />
-        </div>
+        <Header />
+        <main
+          style={{
+            maxHeight: 'calc(100vh - 8rem)',
+            minHeight: 'calc(100vh - 8rem)'
+          }}
+          className={'overflow-y-auto mt-[4rem] relative'}
+        >
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   )

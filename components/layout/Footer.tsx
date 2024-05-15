@@ -1,12 +1,10 @@
 // Footer.tsx
 import React from 'react';
 import Link from 'next/link';
-import NextImage from 'next/image';
-import LogoImage from '@/public/main-logo.png';
 
 const Footer: React.FC = () => {
   return (
-    <footer id="App:Footer" className="bg-white bottom-0 w-full flex items-center shadow-lg border-t-2 border-transparent h-[4rem]">
+    <footer id="App:Footer" className="fixed bg-white left-0 bottom-0 w-full flex items-center shadow-lg border-t-2 border-transparent h-[4rem]">
       <div className="flex flex-col lg:flex-row w-full justify-between items-center px-6">
         <p className="text-gray-600">&copy; {new Date().getFullYear().toString()} CommsAI</p>
         <div className="flex items-center">

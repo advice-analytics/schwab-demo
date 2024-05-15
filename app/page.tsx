@@ -1,7 +1,7 @@
 import React from 'react';
 
-import NavMenuWrapper from "@/components/common/NavMenuWrapper";
+import Login from "@/components/login";
 
-const Page: React.FC = () => <NavMenuWrapper activeItem={'All Plans'} />
+const Page: React.FC = () => <Login />
 
 export default Page;

@@ -23,7 +23,7 @@ const CreatePlan: React.FC = () => {
               style={{border: '1px solid lightgrey'}}
               placeholder={'Plan Name'}
             />
-            <FileUpload uploadURL={'/'} />
+            <FileUpload uploadURL={''} />
           </div>
         </div>
       )

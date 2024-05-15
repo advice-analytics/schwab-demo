@@ -40,7 +40,7 @@ function Index() {
 
   return (
     <div className={'flex flex-col gap-y-5'}>
-      <BackButton url={'/'} />
+      <BackButton url={'/home'} />
       <div className={'flex flex-col gap-y-3'}>
         <div className={'flex flex-col gap-y-1'}>
           <p>

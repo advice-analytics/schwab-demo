@@ -25,7 +25,7 @@ const Index = () => {
 
   return (
     <div className={'flex flex-col gap-y-3 md:gap-y-5'}>
-      <BackButton url={'/'} />
+      <BackButton url={'/home'} />
       <p>
         Plan:
         <b className={'ml-3'}>{planData?.name}</b>

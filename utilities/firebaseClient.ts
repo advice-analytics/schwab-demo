@@ -68,8 +68,7 @@ const createAccountWithEmail = async (email: string, password: string): Promise<
 // Function to sign in user with email and password
 const signInUserWithEmailAndPassword = async (email: string, password: string): Promise<UserCredential> => {
   try {
-    const userCredential: UserCredential = await signInWithEmailAndPassword(auth, email, password);
-    return userCredential;
+    return await signInWithEmailAndPassword(auth, email, password);
   } catch (error: any) {
     throw error;
   }

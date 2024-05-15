@@ -18,10 +18,10 @@ const Index: React.FC<CampaignsProps> = ({ planId }) => {
   const [campaignsData, setCampaigns] = useState<any>([]);
 
   const handleSearch = async (searchText: string) => {
-    const results = cachedCampaigns?.campaigns?.filter((participant: any) => {
+    const results = cachedCampaigns?.filter((participant: any) => {
       return `${participant.name.toLowerCase()}`.includes(searchText.toLowerCase());
     });
-    setCampaigns({ ...campaignsData, 'campaigns': results });
+    setCampaigns(results);
   }
 
   useEffect(() => {
@@ -42,8 +42,8 @@ const Index: React.FC<CampaignsProps> = ({ planId }) => {
   const handleDeleteClick = async (deleteCampaignId: string) => {
     try {
       const response: AxiosResponse = await httpService.delete(`/v1/advisor/campaign/${deleteCampaignId}`);
-      const updatedCampaigns = campaignsData?.campaigns?.filter((campaign: any) => campaign.id !== deleteCampaignId);
-      setCampaigns({...campaignsData, 'campaigns': updatedCampaigns});
+      const updatedCampaigns = campaignsData?.filter?.((campaign: any) => campaign.id !== deleteCampaignId);
+      setCampaigns(updatedCampaigns);
     }
     catch (error: any) {
       throw new Error(error);
@@ -71,7 +71,7 @@ const Index: React.FC<CampaignsProps> = ({ planId }) => {
         </tr>
         </thead>
         <tbody>
-          {campaignsData?.map((campaign: any, index: number) => (
+          {campaignsData?.map?.((campaign: any, index: number) => (
             <tr key={index} style={tableRowStyle}>
               <td style={cellStyle}>
                 <p

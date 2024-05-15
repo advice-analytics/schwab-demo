@@ -95,7 +95,7 @@ const Index = () => {
           <div className={'flex items-center justify-between'}>
             <b>Targeting Criteria</b>
             <button
-              className={"underline cursor-pointer text-navyblue font-bold"}
+              className={`underline cursor-pointer text-navyblue font-bold ${campaignInfo?.hide_delete ? 'pointer-events-none opacity-30' : ''}`}
               onClick={handleEditClick}
             >
               Edit
