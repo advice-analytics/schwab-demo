@@ -1,13 +1,11 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 
 import NavMenuWrapper from "@/components/common/NavMenuWrapper";
 
-function CreateCampaignPage() {
-    return (
-        <NavMenuWrapper
-          activeItem={'Create Campaign'}
-        />
-    );
-}
+const CreateCampaignPage: React.FC = () => (
+  <Suspense>
+      <NavMenuWrapper activeItem={'Create Campaign'} />
+  </Suspense>
+)
 
 export default CreateCampaignPage;

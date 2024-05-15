@@ -1,7 +1,11 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 
 import NavMenuWrapper from "@/components/common/NavMenuWrapper";
 
-const Page = () => <NavMenuWrapper activeItem={'Plan Health'} />
+const Page = () => (
+  <Suspense>
+    <NavMenuWrapper activeItem={'Plan Health'} />
+  </Suspense>
+)
 
 export default Page;

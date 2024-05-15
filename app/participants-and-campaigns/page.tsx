@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 
 import NavMenuWrapper from "@/components/common/NavMenuWrapper";
 
-function ParticipantsPage() {
-  return <NavMenuWrapper activeItem={'Participants and Campaigns'} />
-}
+const ParticipantsPage: React.FC = () => (
+  <Suspense>
+    <NavMenuWrapper activeItem={'Participants and Campaigns'} />
+  </Suspense>
+);
 
 export default ParticipantsPage;
