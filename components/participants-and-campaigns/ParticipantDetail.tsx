@@ -59,9 +59,6 @@ const ParticipantDetail = () => {
     Object.keys(campaigns).forEach((campaign) => {
       campaigns[campaign] ? data.include_in.push(campaign) : data.exclude_from.push(campaign);
     });
-    if (notes) {
-      data.notes = notes;
-    }
     try {
       const response: AxiosResponse = await httpService.post(`/v1/advisor/plan/${planId}/participant/${participantId}/campaigns`, data);
     }
