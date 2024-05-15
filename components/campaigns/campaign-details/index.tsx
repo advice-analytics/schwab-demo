@@ -48,6 +48,7 @@ const Index = () => {
           campaignId={campaignId}
           campaignMsg={campaignInfo?.campaign_msg}
           suggestedMsg={campaignInfo?.suggested_campaign_msg}
+          hideDelete={campaignInfo?.hide_delete}
         />
       ),
       active: true

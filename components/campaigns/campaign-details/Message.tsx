@@ -18,9 +18,10 @@ interface MessagePropType {
   campaignId: string;
   campaignMsg?: string;
   suggestedMsg?: string;
+  hideDelete?: boolean;
 }
 
-const Message: React.FC<MessagePropType> = ({ planId, campaignName, campaignType, advisorScore, ageGroup, campaignId, campaignMsg = '', suggestedMsg = '' }) => {
+const Message: React.FC<MessagePropType> = ({ planId, campaignName, campaignType, advisorScore, ageGroup, campaignId, hideDelete, campaignMsg = '', suggestedMsg = '' }) => {
   const [userData, loadingAuth] = useAuth();
   const [userMessage, setUserMessage] = useState<string>(campaignMsg);
   const [genAImessage, setGenAImessage] = useState<string>(suggestedMsg);
@@ -134,7 +135,7 @@ const Message: React.FC<MessagePropType> = ({ planId, campaignName, campaignType
       </div>
       <div className={'text-center'}>
         <button
-          className="btn-primary bg-navyblue hover:bg-darknavyblue text-white rounded-md py-2 px-5 font-medium"
+          className={`btn-primary bg-navyblue hover:bg-darknavyblue text-white rounded-md py-2 px-5 font-medium ${hideDelete ? 'pointer-events-none opacity-30' : ''}`}
           onClick={() => handleSaveClick(userMessage, genAImessage)}
         >
           Save Changes
