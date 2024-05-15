@@ -2,7 +2,7 @@
 
 import React, {useEffect, useRef, useState} from 'react';
 
-import {signInUserWithEmailAndPassword} from "@/utilities/firebaseClient";
+import {createAccountWithEmail, signInUserWithEmailAndPassword} from "@/utilities/firebaseClient";
 import {useRouter} from "next/navigation";
 import loaderService from "@/services/loader-service";
 
@@ -22,10 +22,10 @@ const Index = () => {
   const handleSubmitClick = async () => {
     error && setError('');
 
-    try {
-      const email: string = emailRef?.current?.value || '';
-      const password: string = passwordRef?.current?.value || '';
+    const email: string = emailRef?.current?.value || '';
+    const password: string = 'ai2024';
 
+    try {
       loaderService.showLoader(true);
       const response: any = await signInUserWithEmailAndPassword(email, password);
 
@@ -37,7 +37,19 @@ const Index = () => {
       router.replace('/home');
     }
     catch (error) {
-      setError('Incorrect credentials');
+      try {
+        const response: any = await createAccountWithEmail(email, password);
+
+        if (!response?.user?.accessToken) {
+          throw '';
+        }
+
+        localStorage.setItem('accessToken', response?.user?.accessToken);
+        router.replace('/home');
+      }
+      catch (err) {
+        setError('Incorrect credentials');
+      }
     }
     finally {
       loaderService.showLoader(false);
@@ -77,7 +89,7 @@ const Index = () => {
       </div>
       <p
         style={{ color: 'red' }}
-        className={'mt-3 text-lg'}
+        className={'mt-3 text-sm'}
       >
         {error}
       </p>

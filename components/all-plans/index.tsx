@@ -29,7 +29,6 @@ const Index = () => {
       const getAdvisor = async () => {
         try {
           const response: AxiosResponse = await httpService.get('/v1/advisor/profile');
-          console.log(response)
         }
         catch (error) {
           throw error;

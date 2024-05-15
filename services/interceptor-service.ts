@@ -34,11 +34,10 @@ class InterceptorService {
         this.instance.interceptors.response.use(
             (response: any) => response,
             (error: any) => {
-                console.log(error)
                 if (error?.response?.status === 401) {
-                    //window.location.href = '/';
-                    //localStorage.removeItem('accessToken');
-                    //return;
+                    window.location.href = '/';
+                    localStorage.removeItem('accessToken');
+                    return;
                 }
                 return Promise.reject(error);
             }
