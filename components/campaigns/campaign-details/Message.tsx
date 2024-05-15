@@ -12,7 +12,7 @@ import { useSearchParams } from "next/navigation";
 interface MessagePropType {
   planId: string;
   campaignName: string;
-  campaignType: string;
+  campaignType: string[];
   advisorScore: string[];
   ageGroup: string[];
   campaignId: string;
@@ -49,34 +49,34 @@ const Message: React.FC<MessagePropType> = ({ planId, campaignName, campaignType
     const message: string = await generateCampaignPrompt(
       planId,
       campaignName,
-      campaignType,
-      advisorScore?.join(','),
+      campaignType?.join(', '),
+      advisorScore?.join(', '),
       ageGroup?.join(', '),
       userMessage,
       userData?.uid || ''
     );
     setGenAImessage(message);
-    !userMessage && setUserMessage(message);
+    !campaignMsg && setUserMessage(message);
     return message;
   };
 
   useEffect(() => {
     const fetchGenAIMsg = async () => {
-      if (regenerateAIMsg) {
-        const message: string = await generateAImessage();
-        handleSaveClick(message, message);
-      }
+      const message: string = await generateAImessage();
+      await handleSaveClick(campaignMsg ? campaignMsg : message, message);
     };
 
-    fetchGenAIMsg();
-  }, []);
+    campaignMsg && setUserMessage(campaignMsg);
+    if (regenerateAIMsg && campaignName) {
+      fetchGenAIMsg();
+    }
+  }, [campaignName]);
 
   useEffect(() => {
     if (!regenerateAIMsg) {
-      setUserMessage(campaignMsg);
       setGenAImessage(suggestedMsg);
     }
-  }, [campaignMsg, regenerateAIMsg, suggestedMsg]);
+  }, [suggestedMsg]);
 
   const handleRegenerateClick = async () => {
     generateAImessage();

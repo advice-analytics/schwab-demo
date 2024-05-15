@@ -42,8 +42,8 @@ const Index = () => {
         <Message
           planId={planId}
           campaignName={campaignInfo?.name}
-          campaignType={campaignInfo?.msg_type?.[0]}
-          advisorScore={campaignInfo?.advice_score}
+          campaignType={campaignInfo?.msg_type}
+          advisorScore={campaignInfo?.target_advice_scores}
           ageGroup={campaignInfo?.target_age_groups}
           campaignId={campaignId}
           campaignMsg={campaignInfo?.campaign_msg}
