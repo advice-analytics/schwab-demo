@@ -53,7 +53,7 @@ const ParticipantDetail = () => {
     } = {
       exclude_from: [],
       include_in: [],
-      notes
+      notes: notes ?? ''
     };
 
     Object.keys(campaigns).forEach((campaign) => {

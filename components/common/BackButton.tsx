@@ -15,10 +15,14 @@ const BackButton: React.FC<BackButtonProps> = ({ url }) => {
 
   return (
     <div
-      className={'flex items-center text-navyblue underline cursor-pointer'}
-      onClick={handleBackButtonClick}
+      className={'inline-flex items-center'}
     >
-      <b>&lt; Back</b>
+      <b
+        className={'text-navyblue underline cursor-pointer'}
+        onClick={handleBackButtonClick}
+      >
+        &lt; Back
+      </b>
     </div>
   );
 };
