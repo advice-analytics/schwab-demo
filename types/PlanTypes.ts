@@ -10,6 +10,7 @@ export interface Plan {
   participants: Participant[];
   metrics: {
     health: string;
+    total_assets: number;
   }
   external_id: string;
 }

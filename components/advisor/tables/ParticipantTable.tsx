@@ -60,8 +60,8 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
           <tr style={{ backgroundColor: '#144e74', color: 'white', textAlign: 'center' }}>
             <th style={{ padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap' }}>Participant</th>
             {!isMobileView && <th style={{ padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap' }}>Advice Score</th>}
-            <th style={{ padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap' }}>Top Interest</th>
-            <th>Actions</th>
+            <th style={{ padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap' }}>Top Need</th>
+            <th>Alerts</th>
           </tr>
           </thead>
           <tbody>
@@ -78,7 +78,9 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
                   {participant.external_id}
                 </div>
               </td>
-              {!isMobileView && <td style={{ padding: '12px', textAlign: 'center' }}>{participant.advice_score}</td>}
+              {!isMobileView && <td style={{ padding: '12px', textAlign: 'center' }}>
+                <b className={'text-lg'}>{participant.advice_score}</b>
+              </td>}
               <td style={{ padding: '12px', textAlign: 'center', fontSize: isMobileView ? '14px' : 'inherit' }}>
                 {participant.top_interest}
               </td>

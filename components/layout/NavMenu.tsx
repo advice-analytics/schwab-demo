@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Disclosure } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { BsJustify } from "react-icons/bs";
 import NextImage from 'next/image';
 import Link from 'next/link';
 
@@ -9,7 +9,7 @@ import LogoImage from '@/public/commsai.png';
 import HeaderNavLink from './HeaderNavLink';
 
 const menuItems = [
-  { label: `Advisor`, url: `/` },
+  { label: `Plans`, url: `/` },
 ];
 
 const NavMenu: React.FC<NavMenuProps> = ({ }) => {
@@ -40,15 +40,18 @@ const NavMenu: React.FC<NavMenuProps> = ({ }) => {
               <div className='flex px-2 lg:px-0 items-center'>
                 <Link href="/">
                   <NextImage
-                    className='h-12 w-auto'
+                    className='h-9 md:h-10 w-auto'
                     src={LogoImage}
                     alt=''
-                    width={300}
-                    height={300}
+                    width={250}
+                    height={250}
                   />
                 </Link>
               </div>
-              <div className='flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end'></div>
+              <div className={'flex items-center text-red-500 -ml-14'}>
+                <b className={'text-lg'}>DEMO</b>
+              </div>
+              {/*<div className='flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end'></div>*/}
               <div className='flex px-2 lg:px-0'>
                 <div className='hidden lg:ml-6 lg:flex lg:space-x-8'>
                   {menuItems.map((item) => (
@@ -65,19 +68,22 @@ const NavMenu: React.FC<NavMenuProps> = ({ }) => {
                     </HeaderNavLink>
                   ))}
                 </div>
+                <div className={'flex items-center md:hidden'}>
+                  <BsJustify fontSize={30} />
+                </div>
               </div>
-              <div className='flex items-center lg:hidden'>
-                <Disclosure.Button className='relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:navyblue'>
-                  <span className='absolute -inset-0.5' />
-                  <span className='sr-only'>Open main menu</span>
-                  {open ? (
-                    <XMarkIcon className='block h-6 w-6' aria-hidden='true' />
-                  ) : (
-                    <Bars3Icon className='block h-6 w-6' aria-hidden='true' />
-                  )}
-                </Disclosure.Button>
-              </div>
-              <div className='flex ml-4 lg:flex lg:items-center'></div>
+              {/*<div className='flex items-center lg:hidden'>*/}
+              {/*  <Disclosure.Button className='relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:navyblue'>*/}
+              {/*    <span className='absolute -inset-0.5' />*/}
+              {/*    <span className='sr-only'>Open main menu</span>*/}
+              {/*    {open ? (*/}
+              {/*      <XMarkIcon className='block h-6 w-6' aria-hidden='true' />*/}
+              {/*    ) : (*/}
+              {/*      <Bars3Icon className='block h-6 w-6' aria-hidden='true' />*/}
+              {/*    )}*/}
+              {/*  </Disclosure.Button>*/}
+              {/*</div>*/}
+              {/*<div className='flex ml-4 lg:flex lg:items-center'></div>*/}
             </div>
           </div>
 

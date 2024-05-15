@@ -76,6 +76,9 @@ const CreateCampaign: React.FC = () => {
         if (!validateData()) {
             return;
         }
+
+        error && setError('');
+
         try {
             setLoading(true);
             const response: AxiosResponse = await httpService.post('/v1/advisor/campaign', createCampaignData);

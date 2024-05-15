@@ -447,3 +447,10 @@ h3 {
 body {
   font-size: 80%;
 }
+
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  margin: 0;
+}

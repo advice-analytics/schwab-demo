@@ -20,6 +20,7 @@ import {AxiosResponse} from "axios";
 import ParticipantDetail from "@/components/participants-and-campaigns/ParticipantDetail";
 import Index from "../campaigns/campaign-details";
 import Link from "next/link";
+import {getNumberInUSFormat, getNumInCommaFormat, getTodayFormattedDate} from "@/utilities/utils";
 
 interface NavigationItem {
   id: number;
@@ -101,12 +102,61 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem }) => {
     }
   };
 
+  const calculateSummary = (plans: Plan[]) => {
+    const totalPlans = plans.length;
+    //const totalParticipants: number = plans.reduce((sum, plan) => sum + (plan.participant_count ? plan.participant_count : 0), 0);
+    let totalParticipants: number = 0;
+    let totalAssets: number = 0;
+
+    plans?.forEach((plan: Plan) => {
+      totalParticipants += plan.participant_count;
+      totalAssets += plan.metrics.total_assets;
+    });
+
+    return {
+      totalPlans,
+      totalAssets: getNumberInUSFormat(totalAssets),
+      totalParticipants: getNumInCommaFormat(totalParticipants),
+    };
+  };
+
+  const summary = calculateSummary(plans);
+
   const renderContent = () => {
     switch (activeItem) {
       case 'All Plans':
         return (
-          <>
-            <div className={'flex flex-row-reverse justify-between'}>
+          <div className={'flex flex-col gap-y-4 md:gap-y-8'}>
+            <div className={'text-center md:text-left'}>
+              <p className={'text-base'}>{getTodayFormattedDate()}</p>
+            </div>
+            <div className={'flex flex-col gap-y-3 md:flex-row md:justify-between'}>
+              <div>
+                <div className={'text-center'}>
+                  <p className={'text-base'}>Total Plans</p>
+                </div>
+                <div className={'text-center'}>
+                  <b className={'text-lg'}>{summary?.totalPlans}</b>
+                </div>
+              </div>
+              <div>
+                <div className={'text-center'}>
+                  <p className={'text-base'}>Total Assets</p>
+                </div>
+                <div className={'text-center'}>
+                  <b className={'text-lg'} style={{ color: 'green' }}>{summary?.totalAssets}</b>
+                </div>
+              </div>
+              <div>
+                <div className={'text-center'}>
+                  <p className={'text-base'}>Total Participants</p>
+                </div>
+                <div className={'text-center'}>
+                  <b className={'text-lg text-navyblue'}>{summary?.totalParticipants}</b>
+                </div>
+              </div>
+            </div>
+            <div className={'flex justify-center md:justify-start'}>
               <Link href={'/create-plan'} target={'_blank'}>
                 <button
                   className={'btn-primary bg-navyblue hover:bg-darknavyblue text-white rounded-md pl-5 pr-5 h-11 font-medium opacity-30'}
@@ -117,7 +167,7 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem }) => {
                 </button>
               </Link>
             </div>
-            <PlanTable plans={plans} />
+            <PlanTable plans={plans} totalAssets={summary.totalAssets} />
             {selectedParticipant && (
               <ClientTable
                 clients={selectedParticipant.clients || []}
@@ -125,7 +175,7 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem }) => {
                 selectedParticipant={selectedParticipant}
               />
             )}
-          </>
+          </div>
         );
       case 'Value Proposition':
         return (

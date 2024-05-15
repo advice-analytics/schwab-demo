@@ -39,7 +39,7 @@ const TabView: React.FC<TabView> = ({ tabs }) => {
         {tabs?.map((tab: Tab, index: number) => (
           <div
             key={index}
-            className={`px-5 py-3 cursor-pointer font-bold ${selectedTab === index ? 'bg-gray-200' : 'bg-white'}`}
+            className={`px-5 py-3 cursor-pointer font-bold ${selectedTab === index ? 'bg-gray-200 rounded-t border-b-[3px] border-solid border-navyblue' : 'bg-white'}`}
             onClick={() => handleTabClick(index)}
           >
             {tab.title}

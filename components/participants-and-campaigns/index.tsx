@@ -41,7 +41,7 @@ function Index() {
     <div className={'flex flex-col gap-y-5'}>
       <BackButton url={'/'} />
       <div className={'flex flex-col gap-y-3'}>
-        <div className={'flex flex-row flex-wrap gap-x-10'}>
+        <div className={'flex flex-col gap-y-1'}>
           <p>
             Plan:
             <span className={'ml-2'}>

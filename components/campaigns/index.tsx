@@ -15,7 +15,7 @@ let cachedCampaigns: any = null;
 
 const Index: React.FC<CampaignsProps> = ({ planId }) => {
   const router = useRouter();
-  const [campaignsData, setCampaigns] = useState<any>({});
+  const [campaignsData, setCampaigns] = useState<any>([]);
 
   const handleSearch = async (searchText: string) => {
     const results = cachedCampaigns?.campaigns?.filter((participant: any) => {
@@ -27,7 +27,7 @@ const Index: React.FC<CampaignsProps> = ({ planId }) => {
   useEffect(() => {
     const fetchCampaigns = async () => {
       try {
-        const response = await httpService.get(`/v1/advisor/plan/${planId}`);
+        const response = await httpService.get(`/v1/advisor/plan/${planId}/campaigns`);
         cachedCampaigns = response.data;
         setCampaigns(response.data);
       }
@@ -71,7 +71,7 @@ const Index: React.FC<CampaignsProps> = ({ planId }) => {
         </tr>
         </thead>
         <tbody>
-          {campaignsData?.campaigns?.map((campaign: any, index: number) => (
+          {campaignsData?.map((campaign: any, index: number) => (
             <tr key={index} style={tableRowStyle}>
               <td style={cellStyle}>
                 <p
