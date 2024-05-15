@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useSearchParams } from "next/navigation";
 import { AxiosResponse } from "axios";
@@ -59,8 +59,8 @@ const ParticipantDetail = () => {
     Object.keys(campaigns).forEach((campaign) => {
       campaigns[campaign] ? data.include_in.push(campaign) : data.exclude_from.push(campaign);
     });
-    if (participantData?.notes) {
-      data.notes = participantData?.notes;
+    if (notes) {
+      data.notes = notes;
     }
     try {
       const response: AxiosResponse = await httpService.post(`/v1/advisor/plan/${planId}/participant/${participantId}/campaigns`, data);
@@ -84,11 +84,11 @@ const ParticipantDetail = () => {
               {participantData && (
                 <div className={'flex flex-row-reverse'}>
                   <FavoriteIcon width={30} height={30} planId={planId} participantId={participantId}
-                                filled={participantData?.is_favorite}/>
+                    filled={participantData?.is_favorite} />
                 </div>
               )}
               <div className={'flex items-center mt-2'}>
-                <p className={'text-3xl md:text-4xl'} style={{color: 'green'}}>{participantData?.advice_score}</p>
+                <p className={'text-3xl md:text-4xl'} style={{ color: 'green' }}>{participantData?.advice_score}</p>
                 &nbsp;&nbsp;/&nbsp;
                 <p>100</p>
               </div>
@@ -96,7 +96,7 @@ const ParticipantDetail = () => {
             <div className={'md:hidden'}>
               <div className={'flex items-center'}>
                 <p className={'text-base'}>Advice Score</p>
-                <p className={'text-3xl md:text-4xl ml-3'} style={{color: 'green'}}>{participantData?.advice_score}</p>
+                <p className={'text-3xl md:text-4xl ml-3'} style={{ color: 'green' }}>{participantData?.advice_score}</p>
                 &nbsp;&nbsp;/&nbsp;
                 <p>100</p>
               </div>
@@ -112,13 +112,13 @@ const ParticipantDetail = () => {
             <b>This person’s need for advice (/100):</b>
             <div className={'flex flex-col md:flex-row md:gap-x-14'}>
               <div>
-                <Score label={'Retirement'} value={participantData?.retirement_score} scoreRight/>
-                <Score label={'Investment'} value={participantData?.investing_score} scoreRight/>
-                <Score label={'Tax Planning'} value={participantData?.taxes_score} scoreRight/>
+                <Score label={'Retirement'} value={participantData?.retirement_score} scoreRight />
+                <Score label={'Investment'} value={participantData?.investing_score} scoreRight />
+                <Score label={'Tax Planning'} value={participantData?.taxes_score} scoreRight />
               </div>
               <div>
-                <Score label={'Financial Planning'} value={participantData?.finances_score} scoreRight/>
-                <Score label={'Estate Planning'} value={participantData?.estate_score} scoreRight/>
+                <Score label={'Financial Planning'} value={participantData?.finances_score} scoreRight />
+                <Score label={'Estate Planning'} value={participantData?.estate_score} scoreRight />
               </div>
             </div>
           </div>
@@ -175,7 +175,7 @@ const ParticipantDetail = () => {
           <b>Notes:</b>
           <textarea
             className={'rounded w-full h-40 outline-none py-3 px-3.5 resize-none'}
-            style={{border: '1px solid lightgrey'}}
+            style={{ border: '1px solid lightgrey' }}
             placeholder={'Enter here...'}
             value={notes}
             onChange={(event) => setNotes(event.target.value)}
