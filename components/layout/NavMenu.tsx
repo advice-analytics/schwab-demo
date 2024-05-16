@@ -21,7 +21,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ }) => {
   }
 
   const menuItems: { label: string; disabled?: boolean; onClick?: () => void }[] = [
-    { label: `Plans`, onClick: () => router.push('/'), disabled: !localStorage.getItem('accessToken') },
+    { label: `Plans`, onClick: () => router.push('/') },
     { label: 'Profile', disabled: true },
     { label: 'Support', onClick: handleSupportItemClick }
   ];
