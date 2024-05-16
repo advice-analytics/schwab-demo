@@ -451,3 +451,8 @@ body {
   -moz-appearance: textfield;
   margin: 0;
 }
+
+.disable {
+  pointer-events: none;
+  opacity: 30%;
+}

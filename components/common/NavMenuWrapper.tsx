@@ -36,6 +36,10 @@ const NavMenuWrapper: FC<NavMenuWrapperProps> = ({ activeItem }) => {
     fetchInitialValue(); // Fetch initial value for ValueProp component
   }, [userUid]);
 
+  useEffect(() => {
+    document.getElementById('Plans')?.classList?.remove?.('disable');
+  }, []);
+
   const handleValuePropChange = async (newValueProp: string) => {
     try {
       await saveValuePropToDatabase(userUid, newValueProp);

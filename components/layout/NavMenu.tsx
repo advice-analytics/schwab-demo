@@ -20,8 +20,14 @@ const NavMenu: React.FC<NavMenuProps> = ({ }) => {
     setSupportPopUp(true);
   }
 
+  let accessToken: string | null = null;
+
+  if (typeof localStorage !== 'undefined') {
+    accessToken = localStorage.getItem('accessToken');
+  }
+
   const menuItems: { label: string; disabled?: boolean; onClick?: () => void }[] = [
-    { label: `Plans`, onClick: () => router.push('/home'), disabled: !localStorage.getItem('accessToken') },
+    { label: `Plans`, onClick: () => router.push('/home'), disabled: !accessToken },
     { label: 'Profile', disabled: true },
     { label: 'Support', onClick: handleSupportItemClick }
   ];
@@ -50,7 +56,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ }) => {
               <div className='flex px-2 lg:px-0'>
                 <div className='hidden lg:ml-6 lg:flex lg:space-x-8'>
                   {menuItems.map((item, index: number) => (
-                    <div key={index} className={`flex items-center ${item.disabled ? 'opacity-30 pointer-events-none' : ''}`}>
+                    <div key={index} id={item.label} className={`flex items-center ${item.disabled ? 'disable' : ''}`}>
                       <p className={'text-navyblue text-sm cursor-pointer'} onClick={item.onClick}>
                         {item.label}
                       </p>
