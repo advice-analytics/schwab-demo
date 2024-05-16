@@ -19,7 +19,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ }) => {
   const handleSupportItemClick = () => {
     setSupportPopUp(true);
   }
-  console.log('c')
+
   const menuItems: { label: string; disabled?: boolean; onClick?: () => void }[] = [
     { label: `Plans`, onClick: () => router.push('/home'), disabled: !localStorage.getItem('accessToken') },
     { label: 'Profile', disabled: true },
