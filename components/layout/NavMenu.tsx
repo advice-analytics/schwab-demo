@@ -19,28 +19,12 @@ const NavMenu: React.FC<NavMenuProps> = ({ }) => {
   const handleSupportItemClick = () => {
     setSupportPopUp(true);
   }
-
+  console.log('c')
   const menuItems: { label: string; disabled?: boolean; onClick?: () => void }[] = [
-    { label: `Plans`, onClick: () => router.push('/home') },
+    { label: `Plans`, onClick: () => router.push('/home'), disabled: !localStorage.getItem('accessToken') },
     { label: 'Profile', disabled: true },
     { label: 'Support', onClick: handleSupportItemClick }
   ];
-
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     if (window.scrollY > 10) {
-  //       setIsScrolled(true);
-  //     } else {
-  //       setIsScrolled(false);
-  //     }
-  //   };
-  //
-  //   window.addEventListener('scroll', handleScroll);
-  //
-  //   return () => {
-  //     window.removeEventListener('scroll', handleScroll);
-  //   };
-  // }, []);
 
   return (
     <Disclosure as='nav' className={`bg-black shadow h-[4rem]`}>
@@ -59,7 +43,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ }) => {
                   />
                 </Link>
               </div>
-              <div className={'flex items-center text-red-500 -ml-14 md:ml-16'}>
+              <div className={'flex items-center text-red-500 -ml-14 md:-ml-16 lg:ml-16'}>
                 <b className={'text-lg'}>DEMO</b>
               </div>
               {/*<div className='flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end'></div>*/}
@@ -73,7 +57,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ }) => {
                     </div>
                   ))}
                 </div>
-                <div className={'flex items-center md:hidden'}>
+                <div className={'flex items-center lg:hidden'}>
                   <BsJustify fontSize={30} onClick={() => setMobileMenu(true)}/>
                 </div>
               </div>
@@ -118,7 +102,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ }) => {
           )}
 
           <div
-              className={`fixed ${showMobileMenu ? 'top-0' : '-top-[26%]'} left-0 w-full z-[100] bg-white h-[26%] p-5 duration-200`}
+              className={`fixed ${showMobileMenu ? 'top-0' : '-top-[100%]'} left-0 w-full z-[100] bg-white h-[26%] p-5 duration-200`}
               style={{ boxShadow: '0 4px 2px -2px rgba(0, 0, 0, 0.2)' }}
           >
               <div className={'flex flex-col gap-y-3'}>

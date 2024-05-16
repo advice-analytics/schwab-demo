@@ -78,6 +78,7 @@ const Index = () => {
             className={'border border-solid border-gray-300 outline-none px-4 py-3 rounded-lg w-full mt-2'}
             placeholder={'Password'}
             ref={passwordRef}
+            type={'Password'}
           />
         </div>
         <button

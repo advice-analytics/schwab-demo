@@ -60,11 +60,18 @@ const Index = () => {
 
   campaignInfo?.msg_type?.forEach((msgType: string) => {
     msgTypes.push(msgType.charAt(0).toUpperCase() + msgType.slice(1));
-  })
+  });
 
   campaignInfo?.target_advice_scores?.forEach((score: string) => {
     adviceScoreOptions.push(score.charAt(0).toUpperCase() + score.slice(1));
-  })
+  });
+
+  campaignInfo?.target_age_groups?.sort();
+
+  if (campaignInfo?.target_age_groups?.[campaignInfo?.target_age_groups?.length - 1] === '<25') {
+    const sliced: string[] = campaignInfo?.target_age_groups?.splice(campaignInfo?.target_age_groups?.length - 1, 1);
+    campaignInfo?.target_age_groups?.splice(0, 0, sliced[0]);
+  }
 
   useEffect(() => {
     const fetchCampaignInfo = async () => {

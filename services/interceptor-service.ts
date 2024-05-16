@@ -3,6 +3,8 @@ import axios from 'axios';
 import {getQueryParam} from "@/utilities/utils";
 import loaderService from "@/services/loader-service";
 
+let apiQueue: number = 0;
+
 class InterceptorService {
     instance: AxiosInstance;
 
@@ -45,6 +47,8 @@ class InterceptorService {
     }
 
     async request(method: Method, url: string, data = null, customHeaders = {}) {
+        apiQueue++;
+
         const headers = { ...this.defaultHeaders, ...customHeaders };
         const source = axios.CancelToken.source();
 
@@ -71,7 +75,10 @@ class InterceptorService {
             throw error;
         }
         finally {
-            loaderService.showLoader(false);
+            --apiQueue;
+            if (apiQueue === 0) {
+                loaderService.showLoader(false);
+            }
         }
     }
 }
