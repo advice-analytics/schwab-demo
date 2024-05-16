@@ -63,7 +63,7 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, totalAssets }) => {
           <thead>
           <tr style={{backgroundColor: '#144e74', color: 'white', textAlign: 'center'}}>
             <th style={{padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap'}}>Plan</th>
-            <th style={{padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap'}}>Total Assets</th>
+            {!isMobileView && <th style={{padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap'}}>Total Assets</th>}
             <th style={{padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap'}}>Participants</th>
             {!isMobileView && (
               <th style={{padding: '10px', border: '1px solid #ccc', whiteSpace: 'nowrap'}}>Health</th>
@@ -81,12 +81,14 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, totalAssets }) => {
                   {plan.external_id}
                 </p>
               </td>
-              <td
-                style={{ padding: '12px', textAlign: 'center', color: 'green' }}
-                className={'text-sm'}
-              >
-                {totalAssets}
-              </td>
+              {!isMobileView && (
+                <td
+                  style={{ padding: '12px', textAlign: 'center', color: 'green' }}
+                  className={'text-sm'}
+                >
+                  {totalAssets}
+                </td>
+              )}
               <td
                 style={{ padding: '12px', textAlign: 'center' }}
                 className={'text-sm text-navyblue'}
