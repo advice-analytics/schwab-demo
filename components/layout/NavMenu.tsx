@@ -21,7 +21,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ }) => {
   }
 
   const menuItems: { label: string; disabled?: boolean; onClick?: () => void }[] = [
-    { label: `Plans`, onClick: () => router.push('/home'), disabled: !localStorage.getItem('accessToken') },
+    { label: `Plans`, onClick: () => router.push('/'), disabled: !localStorage.getItem('accessToken') },
     { label: 'Profile', disabled: true },
     { label: 'Support', onClick: handleSupportItemClick }
   ];
@@ -43,13 +43,13 @@ const NavMenu: React.FC<NavMenuProps> = ({ }) => {
   }, []);
 
   return (
-    <Disclosure as='nav' className={`bg-black shadow h-[4rem]`}>
+    <Disclosure as='nav' className={`bg-black shadow ${isScrolled ? 'sticky-header' : ''} h-[4rem]`}>
       {({ open }) => (
         <>
           <div className='mx-auto max-w-8xl px-2 sm:px-4 lg:px-8'>
             <div className='flex h-16 justify-between'>
               <div className='flex px-2 lg:px-0 items-center'>
-                <Link href="/home">
+                <Link href="/">
                   <NextImage
                     className='h-9 md:h-10 w-auto'
                     src={LogoImage}
